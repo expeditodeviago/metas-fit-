@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================== TOKENS DE TEMA ====================
+   Tema escuro (padrão): obsidiana profundo + grafite + laranja esportivo.
+   Tema claro: cinza suave estilo Apple/Strava + branco + laranja #FC4C02. */
+:root,
+.force-dark {
+  --c-black: 8 8 10;
+  --c-white: 255 255 255;
+  --c-app: 11 11 14;
+  --c-surface: 18 18 22;
+  --c-surface-2: 26 26 32;
+  --c-line: 34 34 42;
+  --c-line-strong: 48 48 58;
+
+  --n-50: 250 250 250;
+  --n-100: 245 245 245;
+  --n-200: 229 229 229;
+  --n-300: 212 212 212;
+  --n-400: 163 163 163;
+  --n-500: 115 115 115;
+  --n-600: 82 82 82;
+  --n-700: 64 64 64;
+  --n-800: 38 38 38;
+  --n-900: 23 23 23;
+  --n-950: 10 10 10;
+
+  --g-300: 134 239 172;
+  --g-400: 74 222 128;
+  --r-300: 252 165 165;
+  --r-400: 248 113 113;
+
+  color-scheme: dark;
+}
+
+:root.light {
+  --c-black: 245 245 247;
+  --c-white: 17 17 20;
+  --c-app: 255 255 255;
+  --c-surface: 255 255 255;
+  --c-surface-2: 242 242 246;
+  --c-line: 228 228 234;
+  --c-line-strong: 206 206 216;
+
+  --n-50: 10 10 12;
+  --n-100: 23 23 26;
+  --n-200: 38 38 42;
+  --n-300: 58 58 64;
+  --n-400: 92 92 100;
+  --n-500: 118 118 126;
+  --n-600: 160 160 168;
+  --n-700: 196 196 204;
+  --n-800: 228 228 234;
+  --n-900: 240 240 244;
+  --n-950: 248 248 250;
+
+  --g-300: 21 128 61;
+  --g-400: 22 163 74;
+  --r-300: 185 28 28;
+  --r-400: 220 38 38;
+
+  color-scheme: light;
+}
+
+/* Acessibilidade IHC: fonte ampliada (baixa visão) e alto contraste */
+:root.a11y-large-text {
+  font-size: 112.5%;
+}
+
+:root.a11y-high-contrast {
+  --c-line: 120 120 140;
+  --c-line-strong: 190 190 210;
+}
+
+:root.light.a11y-high-contrast {
+  --c-line: 100 100 116;
+  --c-line-strong: 30 30 40;
+  --n-400: 38 38 45;
+  --n-500: 55 55 64;
+}
+
+:root.a11y-high-contrast .sport-card,
+:root.a11y-high-contrast .sport-card-hover {
+  border-width: 2px;
+}
+
+@layer base {
+  *:focus-visible {
+    outline: 2px solid #fc4c02;
+    outline-offset: 2px;
+  }
+  *,
+  ::before,
+  ::after {
+    border-color: rgb(var(--c-line));
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: rgb(var(--c-black));
+    color: rgb(var(--c-white));
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sport-card {
+  background-color: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+}
+
+:root.light .sport-card,
+:root.light .sport-card-hover {
+  box-shadow: 0 1px 2px rgba(17, 17, 20, 0.04), 0 6px 20px -12px rgba(17, 17, 20, 0.08);
+}
+
+.sport-card-hover {
+  background-color: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.sport-card-hover:hover {
+  border-color: rgb(var(--c-line-strong));
+  background-color: rgb(var(--c-surface-2));
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Crossfade suave do personagem evolutivo */
+.avatar-layer {
+  transition: opacity 120ms linear;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--c-black));
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-line-strong));
+  border-radius: 999px;
+}
