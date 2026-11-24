@@ -481,8 +481,8 @@
         </tr>
         <tr>
           <td><strong>RF02</strong></td>
-          <td>Onboarding com 2 Alunos de Exemplo</td>
-          <td>No primeiro acesso de qualquer novo treinador, a RPC idempotente <code>seed_onboarding_examples()</code> cria automaticamente 2 perfis de exemplo (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>) com 3 avaliações cada, editáveis e excluíveis sem reaparecer após exclusão.</td>
+          <td>Onboarding com Exemplos &amp; Tutorial Guiado</td>
+          <td>No primeiro acesso de novos treinadores, a RPC idempotente <code>seed_onboarding_examples()</code> cria 2 perfis de exemplo (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>) com 3 avaliações cada, acompanhados de um <strong>Tutorial Interativo de Primeiro Login</strong> (<code>OnboardingTutorial.tsx</code>) específico para o Treinador (5 passos) e para o Aluno (4 passos), reabrível a qualquer momento.</td>
         </tr>
         <tr>
           <td><strong>RF03</strong></td>
@@ -813,8 +813,8 @@
         </tr>
         <tr>
           <td><strong>10. Ajuda e documentação</strong></td>
-          <td>Botão permanente de <strong>Ajuda (?)</strong> abrindo o <code>HelpModal</code> contextualizado (Login, Painel do Personal e Portal do Aluno) + acesso rápido à Política LGPD.</td>
-          <td><span class="status-label">Implementado</span> — Explica fluxo da interface, acessibilidade, privacidade e cookies sem sair da tela atual.</td>
+          <td><strong>Tutorial Interativo de Primeiro Login</strong> (treinador e aluno) + botão permanente <strong>Tutorial</strong> e <strong>Ajuda (?)</strong> abrindo o <code>HelpModal</code> contextualizado e acesso rápido à Política LGPD.</td>
+          <td><span class="status-label">Implementado</span> — Ensina todas as funções logo no primeiro acesso e permanece acessível sem sair da tela atual.</td>
         </tr>
       </tbody>
     </table>
@@ -858,8 +858,13 @@
         </tr>
         <tr>
           <td><span class="status-label">Ruído</span></td>
+          <td>Na barra lateral desktop, a linha com <em>A+</em>, <em>Contraste</em> e <em>Ajuda</em> sofria recorte à direita; além disso, o site usava ícone genérico na aba do navegador.</td>
+          <td>Reorganizado o painel lateral em grade 2×2 simétrica (<code>fullWidth</code> em <code>AccessibilityControls</code>) sem recorte mesmo com <code>A+</code> ativo, e criada identidade visual vetorial própria (<code>BrandLogo.tsx</code> e <code>favicon.svg</code>).</td>
+        </tr>
+        <tr>
+          <td><span class="status-label">Ruído</span></td>
           <td>Usuários de baixa visão encontravam bloqueio ao zoom por pinça no celular devido à configuração inicial da tag <code>viewport</code>.</td>
-          <td>Removido <code>user-scalable=no</code> em <code>index.html</code> e adicionados controles globais persistentes de <strong>Texto Ampliado (A+)</strong>, <strong>Alto Contraste</strong> e <strong>Ajuda (?)</strong>.</td>
+          <td>Removido <code>user-scalable=no</code> em <code>index.html</code> e adicionados controles globais persistentes de <strong>Texto Ampliado (A+)</strong>, <strong>Alto Contraste</strong>, <strong>Tutorial</strong> e <strong>Ajuda (?)</strong>.</td>
         </tr>
       </tbody>
     </table>

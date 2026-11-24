@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   AlertCircle,
   ArrowRight,
-  Flame,
   HelpCircle,
   KeyRound,
   Loader2,
@@ -15,6 +14,7 @@ import {
   SkipToContent,
 } from '../hooks/useAccessibility';
 import { ThemeToggle } from '../hooks/useTheme';
+import { BrandLogo } from './BrandLogo';
 import { openPrivacyModal } from './CookieConsent';
 import { HelpModal } from './HelpModal';
 
@@ -78,9 +78,7 @@ export function LoginScreen({
       <aside className="hidden lg:flex lg:w-[54%] xl:w-[58%] flex-col justify-between p-12 xl:p-16 border-r border-line bg-app">
         {/* Marca */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FC4C02] text-[#ffffff]">
-            <Flame className="h-5 w-5" strokeWidth={2.5} />
-          </div>
+          <BrandLogo size="lg" />
           <div>
             <p className="font-display text-2xl font-extrabold uppercase tracking-wider text-white leading-none">
               MEDIDAS <span className="text-[#FC4C02]">&amp;</span> METAS
@@ -158,13 +156,11 @@ export function LoginScreen({
       </aside>
 
       {/* ==================== DIREITA: AUTENTICAÇÃO LIMPA ==================== */}
-      <main id="main-content" className="flex-1 flex flex-col items-center justify-center px-5 py-10 sm:px-8 bg-black">
+      <main id="main-content" className="flex-1 flex flex-col items-center justify-center px-5 pt-16 pb-36 sm:px-8 sm:py-12 bg-black">
         <div className="w-full max-w-[420px]">
           {/* Marca mobile */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FC4C02] text-[#ffffff]">
-              <Flame className="h-5 w-5" strokeWidth={2.5} />
-            </div>
+            <BrandLogo size="lg" />
             <div>
               <p className="font-display text-2xl font-extrabold uppercase tracking-wider text-white leading-none">
                 MEDIDAS <span className="text-[#FC4C02]">&amp;</span> METAS

@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 import {
   Accessibility,
   BookOpen,
+  Compass,
   Cookie,
   HelpCircle,
   ShieldAlert,
   X,
 } from 'lucide-react';
 import { openPrivacyModal } from './CookieConsent';
+import { openOnboardingTutorial } from './OnboardingTutorial';
 
 export type HelpContext = 'login' | 'trainer' | 'client';
 
@@ -143,18 +145,33 @@ export function HelpModal({ open, context, onClose }: HelpModalProps) {
           </section>
         </div>
 
-        <div className="px-5 py-3 border-t border-line flex items-center justify-between gap-2 bg-black">
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              openPrivacyModal();
-            }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-line-strong px-3.5 py-2 text-xs font-semibold text-neutral-300 hover:text-white transition"
-          >
-            <Cookie className="h-3.5 w-3.5 text-[#FC4C02]" aria-hidden="true" />
-            <span>Privacidade &amp; Cookies</span>
-          </button>
+        <div className="px-5 py-3 border-t border-line flex flex-wrap items-center justify-between gap-2 bg-black">
+          <div className="flex flex-wrap items-center gap-2">
+            {(context === 'trainer' || context === 'client') && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  openOnboardingTutorial(context);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-line-strong bg-surface-2 px-3 py-2 text-xs font-semibold text-white hover:border-[#FC4C02] transition"
+              >
+                <Compass className="h-3.5 w-3.5 text-[#FC4C02]" aria-hidden="true" />
+                <span>Ver Tutorial</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                openPrivacyModal();
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-line-strong px-3 py-2 text-xs font-semibold text-neutral-300 hover:text-white transition"
+            >
+              <Cookie className="h-3.5 w-3.5 text-[#FC4C02]" aria-hidden="true" />
+              <span>Privacidade &amp; Cookies</span>
+            </button>
+          </div>
           <button
             type="button"
             onClick={onClose}

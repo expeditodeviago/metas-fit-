@@ -5,7 +5,6 @@ import {
   Calendar,
   CheckCircle2,
   Download,
-  Flame,
   HelpCircle,
   Image as ImageIcon,
   Loader2,
@@ -39,9 +38,11 @@ import {
   SkipToContent,
 } from '../hooks/useAccessibility';
 import { ThemeToggle } from '../hooks/useTheme';
+import { BrandLogo } from './BrandLogo';
 import { EvolutionChart } from './EvolutionChart';
 import { HelpModal } from './HelpModal';
 import { InteractiveBodyEvolution } from './InteractiveBodyEvolution';
+import { OnboardingTutorial } from './OnboardingTutorial';
 import {
   CARD_LOGICAL_WIDTH,
   EvolutionCard,
@@ -283,29 +284,27 @@ export function ClientPortal({
       <header
         className={`sticky ${isTrainerPreview ? 'top-[42px]' : 'top-0'} z-30 border-b border-line bg-black/95 backdrop-blur`}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FC4C02] text-[#ffffff]">
-              <Flame className="h-5 w-5" strokeWidth={2.5} />
-            </div>
-            <div>
-              <p className="font-display text-xl font-extrabold uppercase tracking-wider text-white leading-none">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2 min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <BrandLogo size="md" />
+            <div className="min-w-0">
+              <p className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-wider text-white leading-none truncate">
                 MEDIDAS <span className="text-[#FC4C02]">&amp;</span> METAS
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-500 mt-0.5">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-500 mt-0.5 truncate">
                 Portal do Aluno
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
             <AccessibilityControls compact />
             <ThemeToggle />
             <button
               type="button"
               onClick={() => setHelpOpen(true)}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-2 border border-line-strong text-neutral-300 hover:text-[#FC4C02] transition"
-              title="Ajuda"
+              title="Ajuda e Tutorial"
               aria-label="Abrir ajuda do portal"
             >
               <HelpCircle className="h-4 w-4" />
@@ -315,7 +314,7 @@ export function ClientPortal({
                 type="button"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface border border-line-strong text-neutral-300 hover:text-white transition"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface border border-line-strong text-neutral-300 hover:text-white transition"
                 aria-label="Atualizar"
               >
                 <RefreshCw
@@ -328,7 +327,7 @@ export function ClientPortal({
               <button
                 type="button"
                 onClick={onExit}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-surface border border-line-strong hover:border-white px-2.5 sm:px-3 py-2 text-xs font-bold uppercase tracking-wider text-neutral-200 transition"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-surface border border-line-strong hover:border-white px-2.5 sm:px-3 text-xs font-bold uppercase tracking-wider text-neutral-200 transition"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Sair</span>
@@ -340,6 +339,11 @@ export function ClientPortal({
 
       <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
       <HelpModal open={helpOpen} context="client" onClose={() => setHelpOpen(false)} />
+      <OnboardingTutorial
+        role="client"
+        userName={student.nome}
+        autoOpen={!isTrainerPreview}
+      />
         {/* Hero Humano & Motivacional */}
         <section className="sport-card rounded-2xl p-5 sm:p-6 border-l-4 border-l-[#FC4C02] space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">

@@ -95,18 +95,24 @@ export function SkipToContent() {
 
 export function AccessibilityControls({
   compact = false,
+  fullWidth = false,
 }: {
   compact?: boolean;
+  fullWidth?: boolean;
 }) {
   const { largeText, highContrast, toggleLargeText, toggleHighContrast } =
     useAccessibility();
 
   const btnBase =
-    'flex h-9 items-center justify-center rounded-lg border text-xs font-bold transition shrink-0';
+    'flex h-9 items-center justify-center rounded-lg border text-xs font-bold transition min-w-0';
 
   return (
     <div
-      className="flex items-center gap-1.5"
+      className={
+        fullWidth
+          ? 'grid grid-cols-2 gap-1.5 w-full'
+          : 'flex items-center gap-1.5 shrink-0'
+      }
       role="group"
       aria-label="Controles de acessibilidade"
     >
@@ -116,14 +122,20 @@ export function AccessibilityControls({
         aria-pressed={largeText}
         aria-label="Alternar texto ampliado"
         title="Texto ampliado (A+)"
-        className={`${btnBase} ${compact ? 'w-9' : 'px-2.5 gap-1'} ${
+        className={`${btnBase} ${
+          fullWidth
+            ? 'w-full px-2 gap-1.5'
+            : compact
+              ? 'w-9 shrink-0'
+              : 'px-2.5 gap-1 shrink-0'
+        } ${
           largeText
             ? 'bg-[#FC4C02] border-[#FC4C02] text-[#ffffff]'
             : 'bg-surface-2 border-line-strong text-neutral-300 hover:text-[#FC4C02]'
         }`}
       >
-        <Type className="h-3.5 w-3.5" aria-hidden="true" />
-        {!compact && <span>A+</span>}
+        <Type className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        {!compact && <span className="truncate">A+</span>}
       </button>
 
       <button
@@ -132,14 +144,24 @@ export function AccessibilityControls({
         aria-pressed={highContrast}
         aria-label="Alternar alto contraste"
         title="Alto contraste"
-        className={`${btnBase} ${compact ? 'w-9' : 'px-2.5 gap-1'} ${
+        className={`${btnBase} ${
+          fullWidth
+            ? 'w-full px-2 gap-1.5'
+            : compact
+              ? 'w-9 shrink-0'
+              : 'px-2.5 gap-1 shrink-0'
+        } ${
           highContrast
             ? 'bg-[#FC4C02] border-[#FC4C02] text-[#ffffff]'
             : 'bg-surface-2 border-line-strong text-neutral-300 hover:text-[#FC4C02]'
         }`}
       >
-        <Contrast className="h-3.5 w-3.5" aria-hidden="true" />
-        {!compact && <span className="sr-only sm:not-sr-only">Contraste</span>}
+        <Contrast className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        {!compact && (
+          <span className={fullWidth ? 'truncate' : 'sr-only sm:not-sr-only'}>
+            Contraste
+          </span>
+        )}
       </button>
     </div>
   );
