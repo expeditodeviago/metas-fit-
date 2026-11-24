@@ -188,7 +188,7 @@ export function StudentModal({
               autoFocus
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="Ex.: Divina Eterna"
+              placeholder="Ex.: Nome completo do aluno"
               className="w-full rounded-xl border border-line-strong bg-black px-4 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition"
             />
           </div>

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
-import { loadDemoStore, saveDemoStore } from '../data/demoData';
 import type { AlunoComResumo, ClientPortalPayload } from '../types/database';
 import { sortAvaliacoesAsc } from '../utils/calculations';
 
@@ -42,10 +41,19 @@ export function useClientPortal(): UseClientPortalReturn {
   const [error, setError] = useState<string | null>(null);
 
   const fetchByIdentifier = useCallback(
-    async (identifier: string, recordAccess = false): Promise<boolean> => {
+    async (identifier: string): Promise<boolean> => {
       const cleaned = identifier.trim();
       if (!cleaned) {
         setError('Informe o código de acesso fornecido pelo seu personal.');
+        return false;
+      }
+
+      if (!isSupabaseConfigured) {
+        setClientStudent(null);
+        setLoading(false);
+        setError(
+          'Conexão com o banco de dados não configurada. Verifique as variáveis VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no .env.',
+        );
         return false;
       }
 
@@ -53,47 +61,6 @@ export function useClientPortal(): UseClientPortalReturn {
       setError(null);
 
       try {
-        if (!isSupabaseConfigured) {
-          const store = loadDemoStore();
-          const found = store.alunos.find(
-            (a) =>
-              a.acesso_codigo.toUpperCase() === cleaned.toUpperCase() ||
-              a.acesso_token === cleaned,
-          );
-
-          if (!found) {
-            setClientStudent(null);
-            setError(
-              'Código de acesso não encontrado. Verifique com seu treinador.',
-            );
-            return false;
-          }
-
-          if (!found.acesso_ativo) {
-            setClientStudent(null);
-            setError(
-              'Seu acesso está temporariamente pausado pelo treinador.',
-            );
-            return false;
-          }
-
-          let alunoAtualizado = found;
-          if (recordAccess) {
-            const nowIso = new Date().toISOString();
-            alunoAtualizado = { ...found, ultimo_acesso: nowIso };
-            const nextAlunos = store.alunos.map((a) =>
-              a.id === found.id ? alunoAtualizado : a,
-            );
-            saveDemoStore({ ...store, alunos: nextAlunos });
-          }
-
-          const avaliacoes = store.avaliacoes.filter(
-            (av) => av.aluno_id === found.id,
-          );
-          setClientStudent(toResumo({ aluno: alunoAtualizado, avaliacoes }));
-          return true;
-        }
-
         const { data, error: rpcError } = await supabase.rpc(
           'get_client_portal',
           {
@@ -134,26 +101,12 @@ export function useClientPortal(): UseClientPortalReturn {
       setLoading(false);
       return;
     }
-    void fetchByIdentifier(clientCode, true);
-  }, [clientCode, fetchByIdentifier]);
-
-  // Sincronização em tempo real quando o treinador altera dados em outra aba (Demo Mode)
-  useEffect(() => {
-    if (!clientCode || isSupabaseConfigured) return;
-    const handleSync = () => {
-      void fetchByIdentifier(clientCode, false);
-    };
-    window.addEventListener('storage', handleSync);
-    window.addEventListener('medidas-demo-sync', handleSync);
-    return () => {
-      window.removeEventListener('storage', handleSync);
-      window.removeEventListener('medidas-demo-sync', handleSync);
-    };
+    void fetchByIdentifier(clientCode);
   }, [clientCode, fetchByIdentifier]);
 
   const loginAsClient = async (codeOrToken: string): Promise<boolean> => {
     const cleaned = codeOrToken.trim();
-    const ok = await fetchByIdentifier(cleaned, true);
+    const ok = await fetchByIdentifier(cleaned);
     if (ok) {
       setClientCode(cleaned);
       sessionStorage.setItem(CLIENT_SESSION_KEY, cleaned);
@@ -163,7 +116,7 @@ export function useClientPortal(): UseClientPortalReturn {
 
   const refreshClient = async () => {
     if (!clientCode) return;
-    await fetchByIdentifier(clientCode, false);
+    await fetchByIdentifier(clientCode);
   };
 
   const logoutClient = () => {

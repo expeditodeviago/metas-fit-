@@ -11,12 +11,10 @@ import {
   LogOut,
   ShieldCheck,
 } from 'lucide-react';
-import { DEMO_TRAINER_KEY } from '../hooks/useAuth';
 import { ThemeToggle } from '../hooks/useTheme';
 
 interface TrainerKeyGateProps {
   user: User;
-  isDemoMode: boolean;
   error: string | null;
   onActivate: (key: string) => Promise<boolean>;
   onSignOut: () => Promise<void>;
@@ -24,7 +22,6 @@ interface TrainerKeyGateProps {
 
 export function TrainerKeyGate({
   user,
-  isDemoMode,
   error,
   onActivate,
   onSignOut,
@@ -41,16 +38,6 @@ export function TrainerKeyGate({
     setSubmitting(true);
     try {
       await onActivate(keyInput);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleDemoQuickFill = async () => {
-    setKeyInput(DEMO_TRAINER_KEY);
-    setSubmitting(true);
-    try {
-      await onActivate(DEMO_TRAINER_KEY);
     } finally {
       setSubmitting(false);
     }
@@ -172,25 +159,6 @@ export function TrainerKeyGate({
               </span>
             </button>
           </form>
-
-          {isDemoMode && (
-            <div className="mt-5 pt-4 border-t border-line flex items-center justify-between gap-2">
-              <div className="text-xs text-neutral-400">
-                Chave Demo:{' '}
-                <code className="font-mono font-bold text-[#FC4C02]">
-                  {DEMO_TRAINER_KEY}
-                </code>
-              </div>
-              <button
-                type="button"
-                onClick={handleDemoQuickFill}
-                disabled={submitting}
-                className="rounded-lg bg-white text-black hover:bg-neutral-200 px-3 py-1.5 text-xs font-bold transition"
-              >
-                Usar chave
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

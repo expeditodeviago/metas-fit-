@@ -10,7 +10,6 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
-import { isSupabaseConfigured } from '../lib/supabase';
 import {
   AccessibilityControls,
   SkipToContent,
@@ -20,7 +19,6 @@ import { HelpModal } from './HelpModal';
 
 interface LoginScreenProps {
   onSignInGoogle: () => Promise<void>;
-  onEnterDemoTrainer: () => void;
   onLoginClient: (code: string) => Promise<boolean>;
   trainerError: string | null;
   clientError: string | null;
@@ -28,7 +26,6 @@ interface LoginScreenProps {
 
 export function LoginScreen({
   onSignInGoogle,
-  onEnterDemoTrainer,
   onLoginClient,
   trainerError,
   clientError,
@@ -54,16 +51,6 @@ export function LoginScreen({
     setSubmittingClient(true);
     try {
       await onLoginClient(accessCode.trim());
-    } finally {
-      setSubmittingClient(false);
-    }
-  };
-
-  const handleQuickClientDemo = async (code: string) => {
-    setAccessCode(code);
-    setSubmittingClient(true);
-    try {
-      await onLoginClient(code);
     } finally {
       setSubmittingClient(false);
     }
@@ -224,16 +211,6 @@ export function LoginScreen({
                   exclusiva de treinador.
                 </p>
 
-                {!isSupabaseConfigured && (
-                  <div className="mt-5 rounded-xl bg-surface-2 border border-line-strong px-4 py-3 flex gap-2.5">
-                    <AlertCircle className="h-4 w-4 text-[#FC4C02] shrink-0 mt-0.5" />
-                    <p className="text-xs text-neutral-300 leading-relaxed">
-                      Modo local ativo (sem <code className="text-white">.env</code> do
-                      Supabase). Entre no painel demo abaixo para testar tudo agora.
-                    </p>
-                  </div>
-                )}
-
                 {trainerError && (
                   <div className="mt-4 rounded-xl bg-red-500/10 border border-red-500/30 px-4 py-3 flex gap-2">
                     <AlertCircle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
@@ -273,17 +250,6 @@ export function LoginScreen({
                     {submittingGoogle ? 'Conectando...' : 'Entrar com Google'}
                   </span>
                 </button>
-
-                {!isSupabaseConfigured && (
-                  <button
-                    type="button"
-                    onClick={onEnterDemoTrainer}
-                    className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl bg-[#FC4C02] hover:bg-[#FF5E1A] active:scale-[0.99] text-[#ffffff] font-bold text-sm py-3.5 px-5 transition"
-                  >
-                    <span>Entrar no Painel Demo</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                )}
               </div>
             ) : (
               <div>
@@ -313,7 +279,7 @@ export function LoginScreen({
                         onChange={(e) =>
                           setAccessCode(e.target.value.toUpperCase())
                         }
-                        placeholder="Ex.: DIVINA-2026"
+                        placeholder="Ex.: ALUNO-4821"
                         className="w-full rounded-xl border border-line-strong bg-black pl-10 pr-4 py-3.5 text-sm font-mono font-bold tracking-widest text-white placeholder:font-sans placeholder:font-normal placeholder:tracking-normal placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition uppercase"
                       />
                     </div>
@@ -341,40 +307,6 @@ export function LoginScreen({
                     )}
                   </button>
                 </form>
-
-                {!isSupabaseConfigured && (
-                  <div className="mt-5 pt-5 border-t border-line">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2.5">
-                      Acesso rápido de demonstração
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleQuickClientDemo('DIVINA-2026')}
-                        className="rounded-xl border border-line-strong bg-black hover:border-[#FC4C02] px-3 py-2.5 text-left transition"
-                      >
-                        <p className="text-xs font-bold text-white">
-                          Divina Eterna
-                        </p>
-                        <p className="text-[11px] font-mono text-[#FC4C02] mt-0.5">
-                          DIVINA-2026
-                        </p>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleQuickClientDemo('LUCAS-2026')}
-                        className="rounded-xl border border-line-strong bg-black hover:border-[#FC4C02] px-3 py-2.5 text-left transition"
-                      >
-                        <p className="text-xs font-bold text-white">
-                          Lucas Ferreira
-                        </p>
-                        <p className="text-[11px] font-mono text-[#FC4C02] mt-0.5">
-                          LUCAS-2026
-                        </p>
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>

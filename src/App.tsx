@@ -28,14 +28,12 @@ type TrainerView =
 export function App() {
   const {
     user,
-    isDemoMode,
     isTrainerAuthorized,
     checkingTrainerAuth,
     loading: authLoading,
     authError,
     keyError,
     signInWithGoogle,
-    enterDemoMode,
     activateTrainerKey,
     signOut,
   } = useAuth();
@@ -53,7 +51,7 @@ export function App() {
     createAssessment,
     updateAssessment,
     deleteAssessment,
-  } = useStudents(isTrainerAuthorized ? user?.id : undefined, isDemoMode);
+  } = useStudents(isTrainerAuthorized ? user?.id : undefined);
 
   const {
     clientStudent,
@@ -110,12 +108,11 @@ export function App() {
     );
   }
 
-  // 3. Tela de entrada (Treinador Google OAuth / Demo OR Aluno via Código)
+  // 3. Tela de entrada (Treinador Google OAuth ou Aluno via Código)
   if (!user) {
     return (
       <LoginScreen
         onSignInGoogle={signInWithGoogle}
-        onEnterDemoTrainer={enterDemoMode}
         onLoginClient={loginAsClient}
         trainerError={authError}
         clientError={clientError}
@@ -139,7 +136,6 @@ export function App() {
     return (
       <TrainerKeyGate
         user={user}
-        isDemoMode={isDemoMode}
         error={keyError}
         onActivate={activateTrainerKey}
         onSignOut={signOut}
@@ -302,7 +298,6 @@ export function App() {
     <>
       <TrainerLayout
         user={user}
-        isDemoMode={isDemoMode}
         activeTab={activeTab}
         onChangeTab={(tab) => setView({ screen: 'tab', tab })}
         onOpenNewStudent={() => setIsNewStudentModalOpen(true)}

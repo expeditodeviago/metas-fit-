@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import {
-  DEMO_USER,
-  loadDemoStore,
-  resetDemoStore,
-  saveDemoStore,
-} from '../data/demoData';
 import type {
   Aluno,
   AlunoComResumo,
@@ -18,7 +12,6 @@ import type {
 import {
   calculateIMC,
   generateAccessCode,
-  getTodayIsoDate,
   sortAvaliacoesAsc,
 } from '../utils/calculations';
 
@@ -42,7 +35,6 @@ interface UseStudentsReturn {
     alturaCm: number,
   ) => Promise<Avaliacao>;
   deleteAssessment: (id: string) => Promise<void>;
-  resetDemo: () => void;
 }
 
 export function combineStudentsWithAssessments(
@@ -70,10 +62,7 @@ export function combineStudentsWithAssessments(
     });
 }
 
-export function useStudents(
-  userId: string | undefined,
-  isDemoMode = false,
-): UseStudentsReturn {
+export function useStudents(userId: string | undefined): UseStudentsReturn {
   const [students, setStudents] = useState<AlunoComResumo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,14 +71,6 @@ export function useStudents(
     if (!userId) {
       setStudents([]);
       setLoading(false);
-      return;
-    }
-
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      setStudents(combineStudentsWithAssessments(store.alunos, store.avaliacoes));
-      setLoading(false);
-      setError(null);
       return;
     }
 
@@ -124,26 +105,11 @@ export function useStudents(
     } finally {
       setLoading(false);
     }
-  }, [userId, isDemoMode]);
+  }, [userId]);
 
   useEffect(() => {
     void fetchAll();
   }, [fetchAll]);
-
-  // Mantém abas sincronizadas automaticamente em modo demonstração
-  useEffect(() => {
-    if (!isDemoMode) return;
-    const handleSync = () => {
-      const store = loadDemoStore();
-      setStudents(combineStudentsWithAssessments(store.alunos, store.avaliacoes));
-    };
-    window.addEventListener('storage', handleSync);
-    window.addEventListener('medidas-demo-sync', handleSync);
-    return () => {
-      window.removeEventListener('storage', handleSync);
-      window.removeEventListener('medidas-demo-sync', handleSync);
-    };
-  }, [isDemoMode]);
 
   const createStudent = async (
     payload: Omit<AlunoInsert, 'user_id'>,
@@ -153,33 +119,6 @@ export function useStudents(
     const codigo =
       payload.acesso_codigo?.trim().toUpperCase() ||
       generateAccessCode(payload.nome);
-
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      const created: Aluno = {
-        id: crypto.randomUUID(),
-        user_id: DEMO_USER.id,
-        nome: payload.nome,
-        data_nascimento: payload.data_nascimento,
-        altura_cm: payload.altura_cm,
-        sexo: payload.sexo,
-        email: payload.email ?? null,
-        telefone: payload.telefone ?? null,
-        objetivo: payload.objetivo || 'Recomposição Corporal',
-        peso_meta: payload.peso_meta ?? null,
-        gordura_meta: payload.gordura_meta ?? null,
-        avatar_pele: payload.avatar_pele ?? 'tan',
-        acesso_codigo: codigo,
-        acesso_token: crypto.randomUUID(),
-        acesso_ativo: payload.acesso_ativo ?? true,
-        ultimo_acesso: null,
-        created_at: new Date().toISOString(),
-      };
-      const next = { ...store, alunos: [...store.alunos, created] };
-      saveDemoStore(next);
-      setStudents(combineStudentsWithAssessments(next.alunos, next.avaliacoes));
-      return created;
-    }
 
     const { data, error: insertError } = await supabase
       .from('alunos')
@@ -200,28 +139,6 @@ export function useStudents(
     id: string,
     payload: AlunoUpdate,
   ): Promise<Aluno> => {
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      let updatedStudent: Aluno | null = null;
-      const nextAlunos = store.alunos.map((aluno) => {
-        if (aluno.id !== id) return aluno;
-        updatedStudent = { ...aluno, ...payload };
-        return updatedStudent;
-      });
-      const nextAvaliacoes = payload.altura_cm
-        ? store.avaliacoes.map((av) =>
-          av.aluno_id === id
-            ? { ...av, imc: calculateIMC(av.peso, payload.altura_cm) }
-            : av,
-        )
-        : store.avaliacoes;
-
-      if (!updatedStudent) throw new Error('Aluno não encontrado.');
-      saveDemoStore({ alunos: nextAlunos, avaliacoes: nextAvaliacoes });
-      setStudents(combineStudentsWithAssessments(nextAlunos, nextAvaliacoes));
-      return updatedStudent;
-    }
-
     const { data, error: updateError } = await supabase
       .from('alunos')
       .update(payload)
@@ -235,17 +152,6 @@ export function useStudents(
   };
 
   const deleteStudent = async (id: string): Promise<void> => {
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      const next = {
-        alunos: store.alunos.filter((a) => a.id !== id),
-        avaliacoes: store.avaliacoes.filter((av) => av.aluno_id !== id),
-      };
-      saveDemoStore(next);
-      setStudents(combineStudentsWithAssessments(next.alunos, next.avaliacoes));
-      return;
-    }
-
     const { error: deleteError } = await supabase
       .from('alunos')
       .delete()
@@ -283,39 +189,6 @@ export function useStudents(
 
     const imc = calculateIMC(payload.peso, alturaCm);
 
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      const created: Avaliacao = {
-        id: crypto.randomUUID(),
-        aluno_id: payload.aluno_id,
-        user_id: DEMO_USER.id,
-        data_avaliacao: payload.data_avaliacao ?? getTodayIsoDate(),
-        peso: payload.peso,
-        imc,
-        gordura_corporal: payload.gordura_corporal ?? null,
-        musculatura: payload.musculatura ?? null,
-        calorias_necessarias: payload.calorias_necessarias ?? null,
-        idade_corporal: payload.idade_corporal ?? null,
-        gordura_visceral: payload.gordura_visceral ?? null,
-        biceps_d: payload.biceps_d ?? null,
-        biceps_e: payload.biceps_e ?? null,
-        ombro: payload.ombro ?? null,
-        peito: payload.peito ?? null,
-        cintura: payload.cintura ?? null,
-        quadril: payload.quadril ?? null,
-        coxa_d: payload.coxa_d ?? null,
-        coxa_e: payload.coxa_e ?? null,
-        panturrilha_d: payload.panturrilha_d ?? null,
-        panturrilha_e: payload.panturrilha_e ?? null,
-        observacoes: payload.observacoes ?? null,
-        created_at: new Date().toISOString(),
-      };
-      const next = { ...store, avaliacoes: [...store.avaliacoes, created] };
-      saveDemoStore(next);
-      setStudents(combineStudentsWithAssessments(next.alunos, next.avaliacoes));
-      return created;
-    }
-
     const { data, error: insertError } = await supabase
       .from('avaliacoes')
       .insert({
@@ -341,24 +214,6 @@ export function useStudents(
         ? calculateIMC(payload.peso, alturaCm)
         : undefined;
 
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      let updatedAv: Avaliacao | null = null;
-      const nextAvaliacoes = store.avaliacoes.map((av) => {
-        if (av.id !== id) return av;
-        updatedAv = {
-          ...av,
-          ...payload,
-          ...(imc !== undefined ? { imc } : {}),
-        };
-        return updatedAv;
-      });
-      if (!updatedAv) throw new Error('Avaliação não encontrada.');
-      saveDemoStore({ alunos: store.alunos, avaliacoes: nextAvaliacoes });
-      setStudents(combineStudentsWithAssessments(store.alunos, nextAvaliacoes));
-      return updatedAv;
-    }
-
     const { data, error: updateError } = await supabase
       .from('avaliacoes')
       .update({
@@ -375,17 +230,6 @@ export function useStudents(
   };
 
   const deleteAssessment = async (id: string): Promise<void> => {
-    if (isDemoMode) {
-      const store = loadDemoStore();
-      const next = {
-        ...store,
-        avaliacoes: store.avaliacoes.filter((av) => av.id !== id),
-      };
-      saveDemoStore(next);
-      setStudents(combineStudentsWithAssessments(next.alunos, next.avaliacoes));
-      return;
-    }
-
     const { error: deleteError } = await supabase
       .from('avaliacoes')
       .delete()
@@ -393,14 +237,6 @@ export function useStudents(
 
     if (deleteError) throw deleteError;
     await fetchAll();
-  };
-
-  const resetDemo = () => {
-    if (!isDemoMode) return;
-    const initial = resetDemoStore();
-    setStudents(
-      combineStudentsWithAssessments(initial.alunos, initial.avaliacoes),
-    );
   };
 
   return {
@@ -416,6 +252,5 @@ export function useStudents(
     createAssessment,
     updateAssessment,
     deleteAssessment,
-    resetDemo,
   };
 }

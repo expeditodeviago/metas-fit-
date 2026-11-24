@@ -23,7 +23,6 @@ export type TrainerNavTab = 'overview' | 'students' | 'access';
 
 interface TrainerLayoutProps {
   user: User;
-  isDemoMode: boolean;
   activeTab: TrainerNavTab;
   onChangeTab: (tab: TrainerNavTab) => void;
   onOpenNewStudent: () => void;
@@ -61,7 +60,6 @@ const NAV_ITEMS: {
 
 export function TrainerLayout({
   user,
-  isDemoMode,
   activeTab,
   onChangeTab,
   onOpenNewStudent,
@@ -173,12 +171,6 @@ export function TrainerLayout({
               {isDarkTheme ? 'Off' : 'On'}
             </span>
           </button>
-
-          {isDemoMode && (
-            <div className="rounded-lg bg-surface-2 border border-line px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
-              Modo Local (Demo)
-            </div>
-          )}
 
           <div className="flex items-center gap-2.5 rounded-xl bg-surface border border-line p-2.5">
             {avatarUrl ? (

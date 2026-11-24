@@ -23,8 +23,8 @@ const CONTEXT_STEPS: Record<
     title: 'Como acessar o sistema',
     subtitle: 'Escolha entre o painel do personal trainer ou o portal do aluno.',
     steps: [
-      'Treinador: entre com Google OAuth (ou Painel Demo em ambiente local) e informe sua chave de segurança.',
-      'Aluno: insira o código individual enviado pelo personal (ex.: DIVINA-2026 ou LUCAS-2026) na aba "Aluno".',
+      'Treinador: entre com sua conta Google OAuth e valide sua chave exclusiva de treinador.',
+      'Aluno: insira o código individual enviado pelo personal trainer na aba "Aluno" ou abra o link exclusivo.',
       'Acessibilidade e Tema: use os botões A+, Contraste e Tema Claro/Escuro no topo a qualquer momento.',
     ],
   },
