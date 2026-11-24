@@ -1,18 +1,23 @@
 -- ============================================================================
--- Medidas & Metas — Script SQL Completo (Segurança Máxima)
--- Camada 1: Google OAuth (JWT assinado pelo Supabase + 2FA do Google)
+-- Medidas & Metas — Script SQL Completo (Hardened Supabase + Postgres 17)
+-- Camada 1: Google OAuth (JWT assinado pelo Supabase)
 -- Camada 2: Chave de Acesso do Treinador com hash bcrypt + anti brute-force
--- Camada 3: Row Level Security (RLS) exigindo auth.uid() + treinador autorizado
+-- Camada 3: Row Level Security (RLS) otimizada com (select auth.uid()) + private schema
 -- Camada 4: Portal do Aluno somente leitura via RPC controlada (sem SELECT anon)
 -- ============================================================================
 
-create extension if not exists "pgcrypto";
+create extension if not exists pgcrypto with schema extensions;
+create schema if not exists private;
+
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
 
 -- Função auxiliar para gerar código de acesso legível para alunos
 create or replace function public.gerar_codigo_acesso()
 returns text
 language sql
 volatile
+set search_path = ''
 as $$
   select 'MM-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 6));
 $$;
@@ -27,7 +32,6 @@ create table if not exists public.treinadores_autorizados (
   ativado_em timestamptz not null default now()
 );
 
--- Chaves armazenadas APENAS em hash bcrypt (nunca em texto puro)
 create table if not exists public.chaves_treinador (
   id uuid primary key default gen_random_uuid(),
   label text not null default 'Chave Principal',
@@ -38,65 +42,79 @@ create table if not exists public.chaves_treinador (
   created_at timestamptz not null default now()
 );
 
--- Registro de tentativas falhas para bloqueio contra força bruta (rate limit)
 create table if not exists public.tentativas_acesso (
   id bigint generated always as identity primary key,
-  scope text not null,          -- 'trainer_key' | 'client_portal'
-  actor_key text not null,      -- user_id ou código tentado
+  scope text not null,
+  actor_key text not null,
   created_at timestamptz not null default now()
 );
 
 create index if not exists idx_tentativas_scope_actor
   on public.tentativas_acesso (scope, actor_key, created_at desc);
 
--- RLS fechada nas tabelas de segurança: cliente NUNCA lê hashes nem grava direto
+create index if not exists idx_chaves_treinador_claimed_by
+  on public.chaves_treinador (claimed_by);
+
 alter table public.treinadores_autorizados enable row level security;
 alter table public.chaves_treinador enable row level security;
 alter table public.tentativas_acesso enable row level security;
+
+revoke all on public.chaves_treinador from public, anon, authenticated;
+revoke all on public.tentativas_acesso from public, anon, authenticated;
+revoke all on public.treinadores_autorizados from public, anon;
+grant select on public.treinadores_autorizados to authenticated;
 
 drop policy if exists "treinadores_select_self" on public.treinadores_autorizados;
 create policy "treinadores_select_self"
   on public.treinadores_autorizados
   for select
   to authenticated
-  using (auth.uid() = user_id);
+  using ((select auth.uid()) = user_id);
 
--- Helper usado por TODAS as políticas RLS das tabelas de negócio
-create or replace function public.is_authorized_trainer()
+-- Helper em schema não exposto (private) usado pelas políticas RLS
+create or replace function private.is_authorized_trainer()
 returns boolean
 language sql
 stable
 security definer
-set search_path = public
+set search_path = ''
 as $$
   select exists (
     select 1
     from public.treinadores_autorizados t
-    where t.user_id = auth.uid()
+    where t.user_id = (select auth.uid())
       and t.ativo = true
   );
 $$;
+
+revoke all on function private.is_authorized_trainer() from public, anon;
+grant execute on function private.is_authorized_trainer() to authenticated;
 
 -- RPC 1: Verifica se o treinador autenticado via Google já ativou sua chave
 create or replace function public.check_trainer_status()
 returns boolean
 language sql
 stable
-security definer
-set search_path = public
+security invoker
+set search_path = ''
 as $$
-  select public.is_authorized_trainer();
+  select exists (
+    select 1
+    from public.treinadores_autorizados t
+    where t.user_id = (select auth.uid())
+      and t.ativo = true
+  );
 $$;
 
+revoke all on function public.check_trainer_status() from public, anon;
 grant execute on function public.check_trainer_status() to authenticated;
 
 -- RPC 2: Valida a Chave de Acesso do Treinador (hash bcrypt + rate limit 5/15min)
--- e vincula definitivamente a chave ao usuário Google autenticado.
 create or replace function public.activate_trainer_key(p_access_key text)
 returns jsonb
 language plpgsql
 security definer
-set search_path = public, extensions
+set search_path = ''
 as $$
 declare
   v_uid uuid := auth.uid();
@@ -108,8 +126,7 @@ begin
     return jsonb_build_object('ok', false, 'error', 'Faça login com o Google primeiro.');
   end if;
 
-  -- Já autorizado?
-  if public.is_authorized_trainer() then
+  if private.is_authorized_trainer() then
     return jsonb_build_object('ok', true);
   end if;
 
@@ -117,7 +134,6 @@ begin
     return jsonb_build_object('ok', false, 'error', 'Chave de acesso inválida.');
   end if;
 
-  -- Rate limit: máx. 5 tentativas erradas em 15 minutos
   select count(*) into v_failures
   from public.tentativas_acesso
   where scope = 'trainer_key'
@@ -131,12 +147,11 @@ begin
     );
   end if;
 
-  -- Busca chave ativa não reivindicada (ou já pertencente ao mesmo user_id)
   select id into v_key_id
   from public.chaves_treinador
   where ativo = true
     and (claimed_by is null or claimed_by = v_uid)
-    and key_hash = crypt(v_clean, key_hash)
+    and key_hash = extensions.crypt(v_clean, key_hash)
   limit 1;
 
   if v_key_id is null then
@@ -149,7 +164,6 @@ begin
     );
   end if;
 
-  -- Vincula chave e autoriza o treinador
   update public.chaves_treinador
   set claimed_by = v_uid,
       claimed_at = now()
@@ -167,6 +181,7 @@ begin
 end;
 $$;
 
+revoke all on function public.activate_trainer_key(text) from public, anon;
 grant execute on function public.activate_trainer_key(text) to authenticated;
 
 -- ============================================================================
@@ -194,17 +209,6 @@ create table if not exists public.alunos (
 
   created_at timestamptz not null default now()
 );
-
-alter table public.alunos add column if not exists email text;
-alter table public.alunos add column if not exists telefone text;
-alter table public.alunos add column if not exists objetivo text not null default 'Recomposição Corporal';
-alter table public.alunos add column if not exists peso_meta numeric(5, 2);
-alter table public.alunos add column if not exists gordura_meta numeric(4, 1);
-alter table public.alunos add column if not exists avatar_pele text not null default 'tan';
-alter table public.alunos add column if not exists acesso_codigo text unique default public.gerar_codigo_acesso();
-alter table public.alunos add column if not exists acesso_token uuid unique default gen_random_uuid();
-alter table public.alunos add column if not exists acesso_ativo boolean not null default true;
-alter table public.alunos add column if not exists ultimo_acesso timestamptz;
 
 -- ============================================================================
 -- 3. TABELA: public.avaliacoes
@@ -238,8 +242,6 @@ create table if not exists public.avaliacoes (
   created_at timestamptz not null default now()
 );
 
-alter table public.avaliacoes add column if not exists observacoes text;
-
 -- ============================================================================
 -- 4. ÍNDICES E TRIGGERS DE IMC
 -- ============================================================================
@@ -258,8 +260,8 @@ create index if not exists idx_avaliacoes_aluno_data
 create or replace function public.calcular_imc_avaliacao()
 returns trigger
 language plpgsql
-security definer
-set search_path = public
+security invoker
+set search_path = ''
 as $$
 declare
   v_altura_cm numeric;
@@ -276,6 +278,8 @@ begin
 end;
 $$;
 
+revoke all on function public.calcular_imc_avaliacao() from public, anon, authenticated;
+
 drop trigger if exists trg_avaliacoes_calcular_imc on public.avaliacoes;
 create trigger trg_avaliacoes_calcular_imc
 before insert or update of peso, aluno_id on public.avaliacoes
@@ -285,8 +289,8 @@ execute function public.calcular_imc_avaliacao();
 create or replace function public.recalcular_imc_ao_atualizar_altura()
 returns trigger
 language plpgsql
-security definer
-set search_path = public
+security invoker
+set search_path = ''
 as $$
 begin
   if new.altura_cm is distinct from old.altura_cm and new.altura_cm > 0 then
@@ -299,6 +303,8 @@ begin
 end;
 $$;
 
+revoke all on function public.recalcular_imc_ao_atualizar_altura() from public, anon, authenticated;
+
 drop trigger if exists trg_alunos_recalcular_imc on public.alunos;
 create trigger trg_alunos_recalcular_imc
 after update of altura_cm on public.alunos
@@ -306,75 +312,81 @@ for each row
 execute function public.recalcular_imc_ao_atualizar_altura();
 
 -- ============================================================================
--- 5. ROW LEVEL SECURITY (RLS) — EXIGE Google Auth + Chave de Treinador Ativa
+-- 5. GRANTS EXPLÍCITOS + ROW LEVEL SECURITY (RLS) OTIMIZADA
 -- ============================================================================
+grant usage on schema public to anon, authenticated;
+revoke all on public.alunos from public, anon;
+revoke all on public.avaliacoes from public, anon;
+grant select, insert, update, delete on public.alunos to authenticated;
+grant select, insert, update, delete on public.avaliacoes to authenticated;
+
 alter table public.alunos enable row level security;
 alter table public.avaliacoes enable row level security;
 
 drop policy if exists "alunos_select_own" on public.alunos;
 create policy "alunos_select_own"
   on public.alunos for select to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer());
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 drop policy if exists "alunos_insert_own" on public.alunos;
 create policy "alunos_insert_own"
   on public.alunos for insert to authenticated
-  with check (auth.uid() = user_id and public.is_authorized_trainer());
+  with check ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 drop policy if exists "alunos_update_own" on public.alunos;
 create policy "alunos_update_own"
   on public.alunos for update to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer())
-  with check (auth.uid() = user_id and public.is_authorized_trainer());
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()))
+  with check ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 drop policy if exists "alunos_delete_own" on public.alunos;
 create policy "alunos_delete_own"
   on public.alunos for delete to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer());
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 drop policy if exists "avaliacoes_select_own" on public.avaliacoes;
 create policy "avaliacoes_select_own"
   on public.avaliacoes for select to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer());
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 drop policy if exists "avaliacoes_insert_own" on public.avaliacoes;
 create policy "avaliacoes_insert_own"
   on public.avaliacoes for insert to authenticated
   with check (
-    auth.uid() = user_id
-    and public.is_authorized_trainer()
+    (select auth.uid()) = user_id
+    and (select private.is_authorized_trainer())
     and exists (
       select 1 from public.alunos a
-      where a.id = aluno_id and a.user_id = auth.uid()
+      where a.id = aluno_id and a.user_id = (select auth.uid())
     )
   );
 
 drop policy if exists "avaliacoes_update_own" on public.avaliacoes;
 create policy "avaliacoes_update_own"
   on public.avaliacoes for update to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer())
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()))
   with check (
-    auth.uid() = user_id
-    and public.is_authorized_trainer()
+    (select auth.uid()) = user_id
+    and (select private.is_authorized_trainer())
     and exists (
       select 1 from public.alunos a
-      where a.id = aluno_id and a.user_id = auth.uid()
+      where a.id = aluno_id and a.user_id = (select auth.uid())
     )
   );
 
 drop policy if exists "avaliacoes_delete_own" on public.avaliacoes;
 create policy "avaliacoes_delete_own"
   on public.avaliacoes for delete to authenticated
-  using (auth.uid() = user_id and public.is_authorized_trainer());
+  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
 
 -- ============================================================================
--- 6. RPC SEGURA DO PORTAL DO ALUNO (somente leitura, sem SELECT aberto)
+-- 6. RPC SEGURA DO PORTAL DO ALUNO (somente leitura controlada)
 -- ============================================================================
 create or replace function public.get_client_portal(p_identifier text)
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
+set search_path = ''
 as $$
 declare
   v_clean text := trim(coalesce(p_identifier, ''));
@@ -417,12 +429,11 @@ begin
 end;
 $$;
 
+revoke all on function public.get_client_portal(text) from public;
 grant execute on function public.get_client_portal(text) to anon, authenticated;
 
 -- ============================================================================
 -- 7. CRIAÇÃO DA CHAVE MESTRA INICIAL DO TREINADOR (TROQUE ANTES DE RODAR!)
--- Armazenada com hash bcrypt irreversível. Após usada 1 vez, fica vinculada
--- exclusivamente à sua conta Google e nenhuma outra conta consegue usá-la.
 -- ============================================================================
 insert into public.chaves_treinador (label, key_hash)
 select
