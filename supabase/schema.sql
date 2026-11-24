@@ -276,11 +276,11 @@ begin
     return jsonb_build_object('seeded', false, 'reason', 'existing_students');
   end if;
 
-  -- Aluna exemplo 1: Camila Ferreira
+  -- Aluna exemplo 1: Camila Ferreira (apenas dados físicos essenciais, sem contatos fictícios)
   insert into public.alunos (
     user_id, nome, data_nascimento, altura_cm, sexo,
     email, telefone, objetivo, peso_meta, gordura_meta,
-    avatar_pele, acesso_codigo, acesso_ativo
+    acesso_codigo, acesso_ativo
   )
   values (
     v_uid,
@@ -288,12 +288,11 @@ begin
     '1994-05-18',
     165,
     'F',
-    'camila.exemplo@medidasemetas.app',
-    '(62) 99104-2810',
+    null,
+    null,
     'Recomposição Corporal e Definição',
     60.0,
     24.0,
-    'tan',
     public.gerar_codigo_acesso(),
     true
   )
@@ -325,11 +324,11 @@ begin
       'Excelente recomposição: -7,5 cm de cintura e +2,5% de massa muscular. Você pode editar ou excluir este aluno de exemplo.'
     );
 
-  -- Aluno exemplo 2: Rafael Nogueira
+  -- Aluno exemplo 2: Rafael Nogueira (apenas dados físicos essenciais, sem contatos fictícios)
   insert into public.alunos (
     user_id, nome, data_nascimento, altura_cm, sexo,
     email, telefone, objetivo, peso_meta, gordura_meta,
-    avatar_pele, acesso_codigo, acesso_ativo
+    acesso_codigo, acesso_ativo
   )
   values (
     v_uid,
@@ -337,12 +336,11 @@ begin
     '1991-09-10',
     179,
     'M',
-    'rafael.exemplo@medidasemetas.app',
-    '(62) 99218-6430',
+    null,
+    null,
     'Hipertrofia e Ganho de Massa Magra',
     84.0,
     14.0,
-    'brown',
     public.gerar_codigo_acesso(),
     true
   )
@@ -385,7 +383,7 @@ revoke all on function public.seed_onboarding_examples() from public, anon;
 grant execute on function public.seed_onboarding_examples() to authenticated;
 
 -- ============================================================================
--- 7. RPC SEGURA DO PORTAL DO ALUNO (somente leitura controlada)
+-- 7. RPC SEGURA DO PORTAL DO ALUNO (somente leitura controlada + minimização LGPD)
 -- ============================================================================
 create or replace function public.get_client_portal(p_identifier text)
 returns jsonb
@@ -420,7 +418,33 @@ begin
   where id = v_aluno.id;
 
   select coalesce(
-    jsonb_agg(to_jsonb(av) order by av.data_avaliacao asc, av.created_at asc),
+    jsonb_agg(
+      jsonb_build_object(
+        'id', av.id,
+        'aluno_id', av.aluno_id,
+        'data_avaliacao', av.data_avaliacao,
+        'peso', av.peso,
+        'imc', av.imc,
+        'gordura_corporal', av.gordura_corporal,
+        'musculatura', av.musculatura,
+        'calorias_necessarias', av.calorias_necessarias,
+        'idade_corporal', av.idade_corporal,
+        'gordura_visceral', av.gordura_visceral,
+        'biceps_d', av.biceps_d,
+        'biceps_e', av.biceps_e,
+        'ombro', av.ombro,
+        'peito', av.peito,
+        'cintura', av.cintura,
+        'quadril', av.quadril,
+        'coxa_d', av.coxa_d,
+        'coxa_e', av.coxa_e,
+        'panturrilha_d', av.panturrilha_d,
+        'panturrilha_e', av.panturrilha_e,
+        'observacoes', av.observacoes,
+        'created_at', av.created_at
+      )
+      order by av.data_avaliacao asc, av.created_at asc
+    ),
     '[]'::jsonb
   )
   into v_avaliacoes
@@ -428,7 +452,22 @@ begin
   where av.aluno_id = v_aluno.id;
 
   return jsonb_build_object(
-    'aluno', to_jsonb(v_aluno),
+    'aluno', jsonb_build_object(
+      'id', v_aluno.id,
+      'nome', v_aluno.nome,
+      'data_nascimento', v_aluno.data_nascimento,
+      'altura_cm', v_aluno.altura_cm,
+      'sexo', v_aluno.sexo,
+      'email', null,
+      'telefone', null,
+      'objetivo', v_aluno.objetivo,
+      'peso_meta', v_aluno.peso_meta,
+      'gordura_meta', v_aluno.gordura_meta,
+      'acesso_codigo', v_aluno.acesso_codigo,
+      'acesso_ativo', v_aluno.acesso_ativo,
+      'ultimo_acesso', now(),
+      'created_at', v_aluno.created_at
+    ),
     'avaliacoes', v_avaliacoes
   );
 end;

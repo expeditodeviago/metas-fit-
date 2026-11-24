@@ -533,7 +533,7 @@
         <strong>Princípio da Autonomia, Consentimento e Proteção de Dados:</strong> Tanto na entrevista com o personal trainer <strong>Italo Cristino</strong> quanto nos testes de usabilidade com alunos, respeitou-se integralmente o <strong>Princípio da Autonomia</strong> mediante Termo de Consentimento Livre e Esclarecido (TCLE), reforçando que o objeto avaliado era exclusivamente a interface, nunca o corpo ou desempenho físico dos voluntários.
       </p>
       <p>
-        Na aplicação oficial publicada, incorporou-se conformidade direta com a <strong>LGPD (Lei nº 13.709/2018)</strong>: banner explícito de consentimento de cookies/armazenamento local sem rastreadores publicitários, transparência sobre chaves gravadas no navegador, aviso informativo de saúde, isolamento multi-tenant via RLS e autonomia para exclusão definitiva de registros em cascata.
+        Na aplicação oficial publicada, incorporou-se conformidade direta com a <strong>LGPD (Lei nº 13.709/2018)</strong> e o <strong>princípio da necessidade / minimização de dados (Art. 6º, III)</strong>: coleta apenas dos dados físicos indispensáveis (removendo campos não utilizados como tom de pele e e-mail do aluno), banner explícito de consentimento de cookies/armazenamento local sem rastreadores publicitários, filtragem de payload na RPC <code>get_client_portal()</code> (sem expor telefone, e-mail ou UUIDs internos ao portal público), aviso informativo de saúde, isolamento multi-tenant via RLS e exclusão definitiva em cascata.
       </p>
     </div>
   </section>

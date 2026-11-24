@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader2, UserPlus, X } from 'lucide-react';
-import type { Aluno, AlunoInsert, Sexo, SkinTone } from '../types/database';
-import { SKIN_TONE_PALETTES } from './BodySilhouette';
+import type { Aluno, AlunoInsert, Sexo } from '../types/database';
 import {
   formatPtBrNumber,
   generateAccessCode,
@@ -34,12 +33,10 @@ export function StudentModal({
   const [dataNascimento, setDataNascimento] = useState('');
   const [alturaCm, setAlturaCm] = useState('');
   const [sexo, setSexo] = useState<Sexo>('F');
-  const [avatarPele, setAvatarPele] = useState<SkinTone>('tan');
   const [objetivo, setObjetivo] = useState('Recomposição Corporal');
   const [pesoMeta, setPesoMeta] = useState('');
   const [gorduraMeta, setGorduraMeta] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [email, setEmail] = useState('');
   const [acessoCodigo, setAcessoCodigo] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +48,6 @@ export function StudentModal({
       setDataNascimento(initialStudent.data_nascimento.slice(0, 10));
       setAlturaCm(formatPtBrNumber(initialStudent.altura_cm, 1, true));
       setSexo(initialStudent.sexo);
-      setAvatarPele(initialStudent.avatar_pele ?? 'tan');
       setObjetivo(initialStudent.objetivo || 'Recomposição Corporal');
       setPesoMeta(
         initialStudent.peso_meta != null
@@ -64,19 +60,16 @@ export function StudentModal({
           : '',
       );
       setTelefone(initialStudent.telefone ?? '');
-      setEmail(initialStudent.email ?? '');
       setAcessoCodigo(initialStudent.acesso_codigo);
     } else {
       setNome('');
       setDataNascimento('');
       setAlturaCm('');
       setSexo('F');
-      setAvatarPele('tan');
       setObjetivo('Recomposição Corporal');
       setPesoMeta('');
       setGorduraMeta('');
       setTelefone('');
-      setEmail('');
       setAcessoCodigo('');
     }
     setError(null);
@@ -114,12 +107,11 @@ export function StudentModal({
         data_nascimento: dataNascimento,
         altura_cm: parsedHeight,
         sexo,
-        avatar_pele: avatarPele,
         objetivo: objetivo.trim() || 'Recomposição Corporal',
         peso_meta: parseDecimalInput(pesoMeta),
         gordura_meta: parseDecimalInput(gorduraMeta),
         telefone: telefone.trim() || null,
-        email: email.trim() || null,
+        email: null,
         acesso_codigo: code,
       });
       onClose();
@@ -260,36 +252,6 @@ export function StudentModal({
             </div>
           </div>
 
-          {/* Tom de pele do Avatar Humano */}
-          <div>
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-2">
-              Tom de pele do Avatar Humano
-            </span>
-            <div className="grid grid-cols-4 gap-2">
-              {(['light', 'tan', 'brown', 'deep'] as const).map((tone) => {
-                const p = SKIN_TONE_PALETTES[tone];
-                const active = avatarPele === tone;
-                return (
-                  <button
-                    key={tone}
-                    type="button"
-                    onClick={() => setAvatarPele(tone)}
-                    className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 px-2 border text-[11px] font-semibold transition ${active
-                      ? 'border-[#FC4C02] bg-surface-2 text-white'
-                      : 'border-line-strong bg-black text-neutral-400 hover:text-white'
-                      }`}
-                  >
-                    <span
-                      className="h-3.5 w-3.5 rounded-full shrink-0 border border-white/20"
-                      style={{ backgroundColor: p.swatch }}
-                    />
-                    <span>{p.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           <div className="pt-3 border-t border-line space-y-3">
             <span className="block text-[11px] font-bold uppercase tracking-wider text-[#FC4C02]">
               Objetivo &amp; Metas
@@ -350,40 +312,45 @@ export function StudentModal({
             </div>
           </div>
 
-          <div className="pt-3 border-t border-line grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label
-                htmlFor="aluno-whatsapp"
-                className="block text-[11px] font-medium text-neutral-400 mb-1"
-              >
-                WhatsApp (com DDD)
-              </label>
-              <input
-                id="aluno-whatsapp"
-                type="tel"
-                value={telefone}
-                onChange={(e) => setTelefone(e.target.value)}
-                placeholder="Ex.: 5511999999999"
-                className="w-full rounded-xl border border-line-strong bg-black px-3.5 py-2.5 text-sm text-white placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition"
-              />
-            </div>
+          <div className="pt-3 border-t border-line space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label
+                  htmlFor="aluno-whatsapp"
+                  className="block text-[11px] font-medium text-neutral-400 mb-1"
+                >
+                  WhatsApp (opcional — envio do card)
+                </label>
+                <input
+                  id="aluno-whatsapp"
+                  type="tel"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  placeholder="Ex.: 5511999999999"
+                  className="w-full rounded-xl border border-line-strong bg-black px-3.5 py-2.5 text-sm text-white placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition"
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="aluno-codigo"
-                className="block text-[11px] font-medium text-neutral-400 mb-1"
-              >
-                Código de Acesso
-              </label>
-              <input
-                id="aluno-codigo"
-                type="text"
-                value={acessoCodigo}
-                onChange={(e) => setAcessoCodigo(e.target.value.toUpperCase())}
-                placeholder="Gerado automático"
-                className="w-full rounded-xl border border-line-strong bg-black px-3.5 py-2.5 text-sm font-mono font-bold text-[#FC4C02] placeholder:font-sans placeholder:font-normal placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition uppercase"
-              />
+              <div>
+                <label
+                  htmlFor="aluno-codigo"
+                  className="block text-[11px] font-medium text-neutral-400 mb-1"
+                >
+                  Código de Acesso (opcional)
+                </label>
+                <input
+                  id="aluno-codigo"
+                  type="text"
+                  value={acessoCodigo}
+                  onChange={(e) => setAcessoCodigo(e.target.value.toUpperCase())}
+                  placeholder="Gerado automático"
+                  className="w-full rounded-xl border border-line-strong bg-black px-3.5 py-2.5 text-sm font-mono font-bold text-[#FC4C02] placeholder:font-sans placeholder:font-normal placeholder:text-neutral-600 focus:border-[#FC4C02] focus:outline-none transition uppercase"
+                />
+              </div>
             </div>
+            <p className="text-[11px] text-neutral-500">
+              Minimização de dados (LGPD): coletamos apenas os dados físicos essenciais para a avaliação e o acompanhamento do aluno.
+            </p>
           </div>
 
           {error && (

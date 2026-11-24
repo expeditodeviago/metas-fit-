@@ -290,7 +290,7 @@ export function CookieConsentManager() {
 
                   <div className="rounded-xl bg-black border border-line p-3.5">
                     <p className="font-bold text-white mb-2">
-                      Chaves armazenadas no navegador
+                      Chaves armazenadas no navegador (sem rastreadores)
                     </p>
                     <ul className="space-y-1 text-neutral-400">
                       <li>
@@ -305,15 +305,15 @@ export function CookieConsentManager() {
                       </li>
                       <li>
                         <code className="text-neutral-200">
-                          mm_client_portal_code
+                          medidas_metas_client_code
                         </code>{' '}
-                        — Último código aberto no Portal do Aluno (essencial).
+                        — Código da aba atual no Portal do Aluno (<code>sessionStorage</code>, apagado ao fechar o navegador).
                       </li>
                       <li>
                         <code className="text-neutral-200">
-                          mm-theme / mm-accessibility
+                          medidas_metas_theme / medidas_metas_a11y / mm_onboarding_*
                         </code>{' '}
-                        — Tema claro/escuro, A+ e alto contraste (preferências).
+                        — Tema claro/escuro, A+, alto contraste e controle para não repetir o tutorial inicial (preferências).
                       </li>
                     </ul>
                   </div>
@@ -324,14 +324,16 @@ export function CookieConsentManager() {
                 <>
                   <div className="space-y-2">
                     <h3 className="font-bold text-white">
-                      1. Quais dados são tratados
+                      1. Quais dados são tratados (Minimização — Art. 6º III)
                     </h3>
                     <p className="text-neutral-400">
-                      Para treinadores: nome, e-mail e foto fornecidos pelo
-                      Google OAuth no momento do login. Para alunos cadastrados
-                      pelo treinador: dados antropométricos (peso, altura,
-                      circunferências, composição corporal), metas físicas e
-                      contatos opcionais informados voluntariamente.
+                      Coletamos apenas os dados estritamente necessários. Para
+                      treinadores: nome, e-mail e foto fornecidos pelo Google
+                      OAuth para autenticação. Para alunos: nome, data de
+                      nascimento, altura, sexo (para o modelo anatômico),
+                      medidas físicas, metas e WhatsApp opcional caso o
+                      treinador queira enviar o card. No Portal do Aluno, dados
+                      de contato e identificadores internos nunca são expostos.
                     </p>
                   </div>
 
