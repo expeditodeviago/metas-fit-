@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import {
   Check,
   Clock,
@@ -98,7 +98,7 @@ export function AccessManager({
           </div>
           <div className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
             <strong className="text-white">Segurança Máxima Ativa:</strong> painel
-            protegido por <strong>Google OAuth + Chave Bcrypt + RLS</strong>. Cada
+            protegido por <strong>Google OAuth + isolamento RLS por conta</strong>. Cada
             aluno acessa apenas a própria evolução via código/link individual (somente
             leitura).
           </div>

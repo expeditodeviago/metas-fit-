@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type {
   Aluno,
@@ -66,6 +66,7 @@ export function useStudents(userId: string | undefined): UseStudentsReturn {
   const [students, setStudents] = useState<AlunoComResumo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const seededUsersRef = useRef<Set<string>>(new Set());
 
   const fetchAll = useCallback(async () => {
     if (!userId) {
@@ -78,6 +79,20 @@ export function useStudents(userId: string | undefined): UseStudentsReturn {
     setError(null);
 
     try {
+      // Garante 2 alunos de exemplo na primeira entrada de novos treinadores (idempotente no Postgres)
+      if (!seededUsersRef.current.has(userId)) {
+        seededUsersRef.current.add(userId);
+        const { error: seedError } = await supabase.rpc(
+          'seed_onboarding_examples',
+        );
+        if (seedError) {
+          console.warn(
+            'Não foi possível criar alunos de exemplo iniciais:',
+            seedError.message,
+          );
+        }
+      }
+
       const [alunosRes, avaliacoesRes] = await Promise.all([
         supabase.from('alunos').select('*').order('nome', { ascending: true }),
         supabase

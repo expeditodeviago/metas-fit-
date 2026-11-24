@@ -186,13 +186,9 @@ export type Database = {
         Args: { p_identifier: string };
         Returns: ClientPortalPayload | null;
       };
-      check_trainer_status: {
+      seed_onboarding_examples: {
         Args: Record<PropertyKey, never>;
-        Returns: boolean;
-      };
-      activate_trainer_key: {
-        Args: { p_access_key: string };
-        Returns: { ok: boolean; error?: string };
+        Returns: { seeded: boolean; reason?: string; students?: string[] };
       };
     };
     Enums: {

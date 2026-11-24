@@ -1,18 +1,12 @@
 -- ============================================================================
--- Medidas & Metas — Script SQL Completo (Hardened Supabase + Postgres 17)
--- Camada 1: Google OAuth (JWT assinado pelo Supabase)
--- Camada 2: Chave de Acesso do Treinador com hash bcrypt + anti brute-force
--- Camada 3: Row Level Security (RLS) otimizada com (select auth.uid()) + private schema
+-- Medidas & Metas — Script SQL Completo (Supabase + PostgreSQL 17)
+-- Camada 1: Google OAuth direto (JWT assinado pelo Supabase Auth)
+-- Camada 2: Row Level Security (RLS) multi-tenant isolado por user_id
+-- Camada 3: Onboarding automático com 2 alunos de exemplo por novo treinador
 -- Camada 4: Portal do Aluno somente leitura via RPC controlada (sem SELECT anon)
 -- ============================================================================
 
-create extension if not exists pgcrypto with schema extensions;
-create schema if not exists private;
-
-revoke all on schema private from public, anon;
-grant usage on schema private to authenticated;
-
--- Função auxiliar para gerar código de acesso legível para alunos
+-- Função auxiliar para gerar código de acesso legível e único para cada aluno
 create or replace function public.gerar_codigo_acesso()
 returns text
 language sql
@@ -22,167 +16,35 @@ as $$
   select 'MM-' || upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 6));
 $$;
 
+grant execute on function public.gerar_codigo_acesso() to authenticated;
+
 -- ============================================================================
--- 1. SEGURANÇA DO TREINADOR: Chaves com hash bcrypt + Rate Limit + Autorização
+-- 1. TABELA: public.perfis_treinador (controle idempotente de onboarding)
 -- ============================================================================
-create table if not exists public.treinadores_autorizados (
+create table if not exists public.perfis_treinador (
   user_id uuid primary key references auth.users(id) on delete cascade,
-  nome_estudio text not null default 'Medidas & Metas',
-  ativo boolean not null default true,
-  ativado_em timestamptz not null default now()
-);
-
-create table if not exists public.chaves_treinador (
-  id uuid primary key default gen_random_uuid(),
-  label text not null default 'Chave Principal',
-  key_hash text not null,
-  claimed_by uuid references auth.users(id) on delete set null,
-  claimed_at timestamptz,
-  ativo boolean not null default true,
+  exemplos_criados boolean not null default false,
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.tentativas_acesso (
-  id bigint generated always as identity primary key,
-  scope text not null,
-  actor_key text not null,
-  created_at timestamptz not null default now()
-);
+alter table public.perfis_treinador enable row level security;
 
-create index if not exists idx_tentativas_scope_actor
-  on public.tentativas_acesso (scope, actor_key, created_at desc);
+revoke all on public.perfis_treinador from public, anon;
+grant select, insert on public.perfis_treinador to authenticated;
 
-create index if not exists idx_chaves_treinador_claimed_by
-  on public.chaves_treinador (claimed_by);
-
-alter table public.treinadores_autorizados enable row level security;
-alter table public.chaves_treinador enable row level security;
-alter table public.tentativas_acesso enable row level security;
-
-revoke all on public.chaves_treinador from public, anon, authenticated;
-revoke all on public.tentativas_acesso from public, anon, authenticated;
-revoke all on public.treinadores_autorizados from public, anon;
-grant select on public.treinadores_autorizados to authenticated;
-
-drop policy if exists "treinadores_select_self" on public.treinadores_autorizados;
-create policy "treinadores_select_self"
-  on public.treinadores_autorizados
+drop policy if exists "perfis_treinador_select_own" on public.perfis_treinador;
+create policy "perfis_treinador_select_own"
+  on public.perfis_treinador
   for select
   to authenticated
   using ((select auth.uid()) = user_id);
 
--- Helper em schema não exposto (private) usado pelas políticas RLS
-create or replace function private.is_authorized_trainer()
-returns boolean
-language sql
-stable
-security definer
-set search_path = ''
-as $$
-  select exists (
-    select 1
-    from public.treinadores_autorizados t
-    where t.user_id = (select auth.uid())
-      and t.ativo = true
-  );
-$$;
-
-revoke all on function private.is_authorized_trainer() from public, anon;
-grant execute on function private.is_authorized_trainer() to authenticated;
-
--- RPC 1: Verifica se o treinador autenticado via Google já ativou sua chave
-create or replace function public.check_trainer_status()
-returns boolean
-language sql
-stable
-security invoker
-set search_path = ''
-as $$
-  select exists (
-    select 1
-    from public.treinadores_autorizados t
-    where t.user_id = (select auth.uid())
-      and t.ativo = true
-  );
-$$;
-
-revoke all on function public.check_trainer_status() from public, anon;
-grant execute on function public.check_trainer_status() to authenticated;
-
--- RPC 2: Valida a Chave de Acesso do Treinador (hash bcrypt + rate limit 5/15min)
-create or replace function public.activate_trainer_key(p_access_key text)
-returns jsonb
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  v_uid uuid := auth.uid();
-  v_clean text := trim(coalesce(p_access_key, ''));
-  v_failures integer;
-  v_key_id uuid;
-begin
-  if v_uid is null then
-    return jsonb_build_object('ok', false, 'error', 'Faça login com o Google primeiro.');
-  end if;
-
-  if private.is_authorized_trainer() then
-    return jsonb_build_object('ok', true);
-  end if;
-
-  if char_length(v_clean) < 6 then
-    return jsonb_build_object('ok', false, 'error', 'Chave de acesso inválida.');
-  end if;
-
-  select count(*) into v_failures
-  from public.tentativas_acesso
-  where scope = 'trainer_key'
-    and actor_key = v_uid::text
-    and created_at > now() - interval '15 minutes';
-
-  if v_failures >= 5 then
-    return jsonb_build_object(
-      'ok', false,
-      'error', 'Muitas tentativas incorretas. Aguarde 15 minutos para tentar novamente.'
-    );
-  end if;
-
-  select id into v_key_id
-  from public.chaves_treinador
-  where ativo = true
-    and (claimed_by is null or claimed_by = v_uid)
-    and key_hash = extensions.crypt(v_clean, key_hash)
-  limit 1;
-
-  if v_key_id is null then
-    insert into public.tentativas_acesso (scope, actor_key)
-    values ('trainer_key', v_uid::text);
-
-    return jsonb_build_object(
-      'ok', false,
-      'error', 'Chave de treinador incorreta ou já vinculada a outra conta.'
-    );
-  end if;
-
-  update public.chaves_treinador
-  set claimed_by = v_uid,
-      claimed_at = now()
-  where id = v_key_id;
-
-  insert into public.treinadores_autorizados (user_id, ativo)
-  values (v_uid, true)
-  on conflict (user_id)
-  do update set ativo = true, ativado_em = now();
-
-  delete from public.tentativas_acesso
-  where scope = 'trainer_key' and actor_key = v_uid::text;
-
-  return jsonb_build_object('ok', true);
-end;
-$$;
-
-revoke all on function public.activate_trainer_key(text) from public, anon;
-grant execute on function public.activate_trainer_key(text) to authenticated;
+drop policy if exists "perfis_treinador_insert_own" on public.perfis_treinador;
+create policy "perfis_treinador_insert_own"
+  on public.perfis_treinador
+  for insert
+  to authenticated
+  with check ((select auth.uid()) = user_id);
 
 -- ============================================================================
 -- 2. TABELA: public.alunos
@@ -312,7 +174,7 @@ for each row
 execute function public.recalcular_imc_ao_atualizar_altura();
 
 -- ============================================================================
--- 5. GRANTS EXPLÍCITOS + ROW LEVEL SECURITY (RLS) OTIMIZADA
+-- 5. GRANTS EXPLÍCITOS + ROW LEVEL SECURITY (RLS) MULTI-TENANT
 -- ============================================================================
 grant usage on schema public to anon, authenticated;
 revoke all on public.alunos from public, anon;
@@ -326,35 +188,34 @@ alter table public.avaliacoes enable row level security;
 drop policy if exists "alunos_select_own" on public.alunos;
 create policy "alunos_select_own"
   on public.alunos for select to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  using ((select auth.uid()) = user_id);
 
 drop policy if exists "alunos_insert_own" on public.alunos;
 create policy "alunos_insert_own"
   on public.alunos for insert to authenticated
-  with check ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  with check ((select auth.uid()) = user_id);
 
 drop policy if exists "alunos_update_own" on public.alunos;
 create policy "alunos_update_own"
   on public.alunos for update to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()))
-  with check ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  using ((select auth.uid()) = user_id)
+  with check ((select auth.uid()) = user_id);
 
 drop policy if exists "alunos_delete_own" on public.alunos;
 create policy "alunos_delete_own"
   on public.alunos for delete to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  using ((select auth.uid()) = user_id);
 
 drop policy if exists "avaliacoes_select_own" on public.avaliacoes;
 create policy "avaliacoes_select_own"
   on public.avaliacoes for select to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  using ((select auth.uid()) = user_id);
 
 drop policy if exists "avaliacoes_insert_own" on public.avaliacoes;
 create policy "avaliacoes_insert_own"
   on public.avaliacoes for insert to authenticated
   with check (
     (select auth.uid()) = user_id
-    and (select private.is_authorized_trainer())
     and exists (
       select 1 from public.alunos a
       where a.id = aluno_id and a.user_id = (select auth.uid())
@@ -364,10 +225,9 @@ create policy "avaliacoes_insert_own"
 drop policy if exists "avaliacoes_update_own" on public.avaliacoes;
 create policy "avaliacoes_update_own"
   on public.avaliacoes for update to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()))
+  using ((select auth.uid()) = user_id)
   with check (
     (select auth.uid()) = user_id
-    and (select private.is_authorized_trainer())
     and exists (
       select 1 from public.alunos a
       where a.id = aluno_id and a.user_id = (select auth.uid())
@@ -377,10 +237,155 @@ create policy "avaliacoes_update_own"
 drop policy if exists "avaliacoes_delete_own" on public.avaliacoes;
 create policy "avaliacoes_delete_own"
   on public.avaliacoes for delete to authenticated
-  using ((select auth.uid()) = user_id and (select private.is_authorized_trainer()));
+  using ((select auth.uid()) = user_id);
 
 -- ============================================================================
--- 6. RPC SEGURA DO PORTAL DO ALUNO (somente leitura controlada)
+-- 6. RPC IDEMPOTENTE: ONBOARDING COM 2 ALUNOS DE EXEMPLO PARA NOVOS USUÁRIOS
+-- ============================================================================
+create or replace function public.seed_onboarding_examples()
+returns jsonb
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  v_uid uuid := (select auth.uid());
+  v_inserted uuid;
+  v_has_students boolean;
+  v_camila_id uuid;
+  v_rafael_id uuid;
+begin
+  if v_uid is null then
+    return jsonb_build_object('seeded', false, 'reason', 'unauthenticated');
+  end if;
+
+  insert into public.perfis_treinador (user_id, exemplos_criados)
+  values (v_uid, true)
+  on conflict (user_id) do nothing
+  returning user_id into v_inserted;
+
+  if v_inserted is null then
+    return jsonb_build_object('seeded', false, 'reason', 'already_initialized');
+  end if;
+
+  select exists (
+    select 1 from public.alunos where user_id = v_uid
+  ) into v_has_students;
+
+  if v_has_students then
+    return jsonb_build_object('seeded', false, 'reason', 'existing_students');
+  end if;
+
+  -- Aluna exemplo 1: Camila Ferreira
+  insert into public.alunos (
+    user_id, nome, data_nascimento, altura_cm, sexo,
+    email, telefone, objetivo, peso_meta, gordura_meta,
+    avatar_pele, acesso_codigo, acesso_ativo
+  )
+  values (
+    v_uid,
+    'Camila Ferreira (Exemplo)',
+    '1994-05-18',
+    165,
+    'F',
+    'camila.exemplo@medidasemetas.app',
+    '(62) 99104-2810',
+    'Recomposição Corporal e Definição',
+    60.0,
+    24.0,
+    'tan',
+    public.gerar_codigo_acesso(),
+    true
+  )
+  returning id into v_camila_id;
+
+  insert into public.avaliacoes (
+    aluno_id, user_id, data_avaliacao,
+    peso, gordura_corporal, musculatura, calorias_necessarias, idade_corporal, gordura_visceral,
+    biceps_d, biceps_e, ombro, peito, cintura, quadril, coxa_d, coxa_e, panturrilha_d, panturrilha_e,
+    observacoes
+  )
+  values
+    (
+      v_camila_id, v_uid, current_date - 120,
+      67.4, 33.2, 27.1, 1520, 35, 8,
+      31.0, 30.8, 101.0, 93.5, 81.0, 104.5, 60.5, 60.2, 37.2, 37.0,
+      'Avaliação inicial de exemplo — foco em redução abdominal e ganho de tônus.'
+    ),
+    (
+      v_camila_id, v_uid, current_date - 60,
+      64.8, 30.4, 28.3, 1560, 32, 7,
+      30.5, 30.4, 101.5, 92.0, 77.2, 102.0, 59.4, 59.2, 37.0, 36.9,
+      'Boa adesão ao treino de força 4x/semana e ajuste proteico.'
+    ),
+    (
+      v_camila_id, v_uid, current_date - 5,
+      62.3, 27.8, 29.6, 1610, 29, 6,
+      30.2, 30.1, 102.4, 91.2, 73.5, 99.8, 58.6, 58.5, 36.8, 36.8,
+      'Excelente recomposição: -7,5 cm de cintura e +2,5% de massa muscular. Você pode editar ou excluir este aluno de exemplo.'
+    );
+
+  -- Aluno exemplo 2: Rafael Nogueira
+  insert into public.alunos (
+    user_id, nome, data_nascimento, altura_cm, sexo,
+    email, telefone, objetivo, peso_meta, gordura_meta,
+    avatar_pele, acesso_codigo, acesso_ativo
+  )
+  values (
+    v_uid,
+    'Rafael Nogueira (Exemplo)',
+    '1991-09-10',
+    179,
+    'M',
+    'rafael.exemplo@medidasemetas.app',
+    '(62) 99218-6430',
+    'Hipertrofia e Ganho de Massa Magra',
+    84.0,
+    14.0,
+    'brown',
+    public.gerar_codigo_acesso(),
+    true
+  )
+  returning id into v_rafael_id;
+
+  insert into public.avaliacoes (
+    aluno_id, user_id, data_avaliacao,
+    peso, gordura_corporal, musculatura, calorias_necessarias, idade_corporal, gordura_visceral,
+    biceps_d, biceps_e, ombro, peito, cintura, quadril, coxa_d, coxa_e, panturrilha_d, panturrilha_e,
+    observacoes
+  )
+  values
+    (
+      v_rafael_id, v_uid, current_date - 120,
+      77.2, 19.4, 37.8, 2350, 34, 7,
+      34.8, 34.5, 117.0, 98.5, 86.0, 98.5, 56.8, 56.5, 37.4, 37.2,
+      'Avaliação inicial de exemplo — foco em hipertrofia de superiores e controle de gordura visceral.'
+    ),
+    (
+      v_rafael_id, v_uid, current_date - 60,
+      79.5, 17.8, 39.4, 2480, 31, 6,
+      36.2, 36.0, 119.4, 101.2, 83.8, 98.0, 58.4, 58.1, 38.0, 37.9,
+      'Progressão consistente de carga em peitoral, dorsais e quadríceps.'
+    ),
+    (
+      v_rafael_id, v_uid, current_date - 5,
+      81.6, 15.9, 41.2, 2610, 28, 5,
+      37.9, 37.7, 122.0, 104.0, 81.2, 97.4, 60.2, 60.0, 38.8, 38.6,
+      'Ganho sólido de +3,4% em musculatura com -4,8 cm na cintura. Você pode editar ou excluir este aluno de exemplo.'
+    );
+
+  return jsonb_build_object(
+    'seeded', true,
+    'students', jsonb_build_array(v_camila_id, v_rafael_id)
+  );
+end;
+$$;
+
+revoke all on function public.seed_onboarding_examples() from public, anon;
+grant execute on function public.seed_onboarding_examples() to authenticated;
+
+-- ============================================================================
+-- 7. RPC SEGURA DO PORTAL DO ALUNO (somente leitura controlada)
 -- ============================================================================
 create or replace function public.get_client_portal(p_identifier text)
 returns jsonb
@@ -431,14 +436,3 @@ $$;
 
 revoke all on function public.get_client_portal(text) from public;
 grant execute on function public.get_client_portal(text) to anon, authenticated;
-
--- ============================================================================
--- 7. CRIAÇÃO DA CHAVE MESTRA INICIAL DO TREINADOR (TROQUE ANTES DE RODAR!)
--- ============================================================================
-insert into public.chaves_treinador (label, key_hash)
-select
-  'Chave Principal do Treinador',
-  extensions.crypt('TROQUE-POR-SUA-CHAVE-SECRETA-2026', extensions.gen_salt('bf', 10))
-where not exists (
-  select 1 from public.chaves_treinador where label = 'Chave Principal do Treinador'
-);

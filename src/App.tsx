@@ -15,7 +15,7 @@ import { StudentProfile } from './components/StudentProfile';
 import { AssessmentForm } from './components/AssessmentForm';
 import { CardViewer } from './components/CardViewer';
 import { ClientPortal } from './components/ClientPortal';
-import { TrainerKeyGate } from './components/TrainerKeyGate';
+import { CookieConsentManager } from './components/CookieConsent';
 import type { Avaliacao } from './types/database';
 
 type TrainerView =
@@ -28,13 +28,9 @@ type TrainerView =
 export function App() {
   const {
     user,
-    isTrainerAuthorized,
-    checkingTrainerAuth,
     loading: authLoading,
     authError,
-    keyError,
     signInWithGoogle,
-    activateTrainerKey,
     signOut,
   } = useAuth();
 
@@ -51,7 +47,7 @@ export function App() {
     createAssessment,
     updateAssessment,
     deleteAssessment,
-  } = useStudents(isTrainerAuthorized ? user?.id : undefined);
+  } = useStudents(user?.id);
 
   const {
     clientStudent,
@@ -88,11 +84,14 @@ export function App() {
 
   if (!user && clientStudent) {
     return (
-      <ClientPortal
-        student={clientStudent}
-        onExit={logoutClient}
-        onRefresh={refreshClient}
-      />
+      <>
+        <ClientPortal
+          student={clientStudent}
+          onExit={logoutClient}
+          onRefresh={refreshClient}
+        />
+        <CookieConsentManager />
+      </>
     );
   }
 
@@ -108,51 +107,34 @@ export function App() {
     );
   }
 
-  // 3. Tela de entrada (Treinador Google OAuth ou Aluno via Código)
+  // 3. Tela de entrada (Treinador Google OAuth direto ou Aluno via Código)
   if (!user) {
     return (
-      <LoginScreen
-        onSignInGoogle={signInWithGoogle}
-        onLoginClient={loginAsClient}
-        trainerError={authError}
-        clientError={clientError}
-      />
-    );
-  }
-
-  // 3.5. Verificação da 2ª camada de segurança do Treinador (Chave Bcrypt + RLS)
-  if (checkingTrainerAuth) {
-    return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-3 text-[#FC4C02]">
-        <Loader2 className="h-8 w-8 animate-spin" />
-        <p className="text-sm font-medium text-neutral-400">
-          Verificando credenciais do treinador...
-        </p>
-      </div>
-    );
-  }
-
-  if (!isTrainerAuthorized) {
-    return (
-      <TrainerKeyGate
-        user={user}
-        error={keyError}
-        onActivate={activateTrainerKey}
-        onSignOut={signOut}
-      />
+      <>
+        <LoginScreen
+          onSignInGoogle={signInWithGoogle}
+          onLoginClient={loginAsClient}
+          trainerError={authError}
+          clientError={clientError}
+        />
+        <CookieConsentManager />
+      </>
     );
   }
 
   // 4. Preview instantâneo do Portal do Aluno a partir do Painel do Treinador
   if (view.screen === 'client-preview' && activeStudent) {
     return (
-      <ClientPortal
-        student={activeStudent}
-        isTrainerPreview
-        onExit={() =>
-          setView({ screen: 'profile', studentId: activeStudent.id })
-        }
-      />
+      <>
+        <ClientPortal
+          student={activeStudent}
+          isTrainerPreview
+          onExit={() =>
+            setView({ screen: 'profile', studentId: activeStudent.id })
+          }
+        />
+        <CookieConsentManager />
+      </>
     );
   }
 
@@ -316,6 +298,8 @@ export function App() {
           setView({ screen: 'profile', studentId: created.id });
         }}
       />
+
+      <CookieConsentManager />
     </>
   );
 }

@@ -2,10 +2,12 @@ import { useEffect } from 'react';
 import {
   Accessibility,
   BookOpen,
+  Cookie,
   HelpCircle,
   ShieldAlert,
   X,
 } from 'lucide-react';
+import { openPrivacyModal } from './CookieConsent';
 
 export type HelpContext = 'login' | 'trainer' | 'client';
 
@@ -23,7 +25,7 @@ const CONTEXT_STEPS: Record<
     title: 'Como acessar o sistema',
     subtitle: 'Escolha entre o painel do personal trainer ou o portal do aluno.',
     steps: [
-      'Treinador: entre com sua conta Google OAuth e valide sua chave exclusiva de treinador.',
+      'Treinador: entre diretamente com sua conta Google. Novos usuários já recebem 2 alunos de exemplo prontos para testar, editar ou excluir.',
       'Aluno: insira o código individual enviado pelo personal trainer na aba "Aluno" ou abra o link exclusivo.',
       'Acessibilidade e Tema: use os botões A+, Contraste e Tema Claro/Escuro no topo a qualquer momento.',
     ],
@@ -129,7 +131,7 @@ export function HelpModal({ open, context, onClose }: HelpModalProps) {
               • <strong>Navegação por teclado e toque único</strong> (Tab/Enter/Esc + zonas grandes) atende limitação temporária em membro superior.
             </p>
             <p className="text-neutral-400">
-              • <strong>Retorno visual + transcrição textual</strong> acompanham sinais sonoros (ex.: estetoscópio em laboratório barulhento).
+              • <strong>Legenda textual e alternância de tema</strong> acompanham as cores verde/laranja em ambientes de academia com luz intensa ou baixo contraste.
             </p>
           </section>
 
@@ -141,7 +143,18 @@ export function HelpModal({ open, context, onClose }: HelpModalProps) {
           </section>
         </div>
 
-        <div className="px-5 py-3 border-t border-line flex justify-end bg-black">
+        <div className="px-5 py-3 border-t border-line flex items-center justify-between gap-2 bg-black">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              openPrivacyModal();
+            }}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-line-strong px-3.5 py-2 text-xs font-semibold text-neutral-300 hover:text-white transition"
+          >
+            <Cookie className="h-3.5 w-3.5 text-[#FC4C02]" aria-hidden="true" />
+            <span>Privacidade &amp; Cookies</span>
+          </button>
           <button
             type="button"
             onClick={onClose}

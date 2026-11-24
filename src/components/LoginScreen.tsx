@@ -15,6 +15,7 @@ import {
   SkipToContent,
 } from '../hooks/useAccessibility';
 import { ThemeToggle } from '../hooks/useTheme';
+import { openPrivacyModal } from './CookieConsent';
 import { HelpModal } from './HelpModal';
 
 interface LoginScreenProps {
@@ -150,7 +151,7 @@ export function LoginScreen({
         <div className="flex items-center gap-6 text-xs text-neutral-500 font-medium">
           <span className="inline-flex items-center gap-1.5">
             <ShieldCheck className="h-4 w-4 text-[#FC4C02]" />
-            Google OAuth + Chave Bcrypt + RLS
+            Google OAuth + Isolamento RLS + LGPD
           </span>
           <span>Portal exclusivo por aluno</span>
         </div>
@@ -207,8 +208,9 @@ export function LoginScreen({
                   Acesso do Treinador
                 </h2>
                 <p className="mt-1.5 text-sm text-neutral-400 leading-relaxed">
-                  Autenticação em 2 camadas: conta Google verificada + sua chave
-                  exclusiva de treinador.
+                  Entre diretamente com sua conta Google. Novos treinadores já
+                  recebem 2 alunos de exemplo prontos para explorar, editar ou
+                  substituir.
                 </p>
 
                 {trainerError && (
@@ -309,6 +311,18 @@ export function LoginScreen({
                 </form>
               </div>
             )}
+          </div>
+
+          <div className="mt-4 text-center text-[11px] text-neutral-500">
+            Ao acessar, você concorda com nossos{' '}
+            <button
+              type="button"
+              onClick={openPrivacyModal}
+              className="underline underline-offset-2 text-neutral-300 hover:text-[#FC4C02] transition"
+            >
+              Termos de Uso, Privacidade e Cookies (LGPD)
+            </button>
+            .
           </div>
         </div>
       </main>
