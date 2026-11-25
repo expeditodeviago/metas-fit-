@@ -2,18 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Relatório de Interface Homem-Máquina — Medidas &amp; Metas | Iago Expedito e Kelwin Afonso</title>
+  <title>Relatório IHC P2 (2026/2) — Projeto Medidas &amp; Metas | Iago Expedito e Kelwin Afonso</title>
   <style>
     @page {
       size: A4;
-      margin: 20mm 19mm 16mm 23mm;
+      margin: 23mm 20mm 20mm 25mm;
       @top-left {
         content: "UNIFAN — Interface Homem-Máquina (P2 2026/2) | Projeto Medidas & Metas";
         font-family: Arial, Helvetica, sans-serif;
         font-size: 8pt;
-        color: #444444;
-        border-bottom: 0.5pt solid #b5b5b5;
-        padding-bottom: 3.5pt;
+        color: #555555;
+        border-bottom: 0.5pt solid #cccccc;
+        padding-bottom: 4pt;
       }
       @top-right {
         content: "Iago Expedito • Kelwin Afonso";
@@ -21,13 +21,13 @@
         font-size: 8pt;
         font-weight: 700;
         color: #111111;
-        border-bottom: 0.5pt solid #b5b5b5;
-        padding-bottom: 3.5pt;
+        border-bottom: 0.5pt solid #cccccc;
+        padding-bottom: 4pt;
       }
     }
 
     @page :first {
-      margin: 18mm 19mm 18mm 23mm;
+      margin: 20mm 20mm 20mm 25mm;
       @top-left { content: none; }
       @top-right { content: none; }
     }
@@ -36,30 +36,31 @@
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-      color: #141414;
+      color: #1a1a1a;
       background: #ffffff;
-      line-height: 1.45;
-      font-size: 9.9pt;
+      line-height: 1.52;
+      font-size: 10.5pt;
       margin: 0;
       padding: 0;
     }
 
-    /* ==================== CAPA ACADÊMICA (PADRÃO ABNT / UNIFAN) ==================== */
+    /* ==================== 1. CAPA LIMPA PADRÃO ABNT ==================== */
     .cover {
-      min-height: 252mm;
+      height: 255mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       page-break-after: always;
+      text-align: center;
     }
 
     .inst-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 4.5mm;
-      border-bottom: 0.9pt solid #222222;
-      margin-bottom: 10mm;
+      padding-bottom: 5mm;
+      border-bottom: 0.8pt solid #222222;
+      margin-bottom: 8mm;
     }
 
     .inst-header img.logo-unifan {
@@ -74,168 +75,199 @@
       object-fit: contain;
     }
 
-    .inst-text {
-      text-align: center;
-      text-transform: uppercase;
-      margin-bottom: 18mm;
-    }
-
     .inst-text .uni {
-      font-size: 11.5pt;
+      font-size: 12pt;
       font-weight: 700;
+      text-transform: uppercase;
       letter-spacing: 0.04em;
       color: #000000;
       margin: 0;
+      text-align: center;
     }
 
     .inst-text .dept {
-      font-size: 9.8pt;
-      font-weight: 400;
+      font-size: 10pt;
       color: #333333;
-      margin: 1.5mm 0 0 0;
+      text-transform: uppercase;
+      margin: 2mm 0 0 0;
+      text-align: center;
     }
 
     .cover-authors {
-      text-align: center;
-      margin: 6mm 0 22mm 0;
-      text-transform: uppercase;
-      font-size: 11pt;
+      margin: 18mm 0;
+      font-size: 12pt;
       font-weight: 700;
-      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: #111111;
     }
 
     .cover-authors p {
-      margin: 1.5mm 0;
+      margin: 2mm 0;
       text-align: center;
     }
 
-    .cover-title-block {
-      text-align: center;
-      margin: 0 auto 20mm auto;
-      max-width: 152mm;
+    .cover-main {
+      margin: auto 0;
+      padding: 0 6mm;
     }
 
     .cover-title {
-      font-size: 18pt;
+      font-size: 20pt;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       color: #000000;
-      margin: 0 0 4mm 0;
+      margin: 0 0 5mm 0;
       line-height: 1.25;
     }
 
     .cover-subtitle {
-      font-size: 11pt;
+      font-size: 11.5pt;
       font-weight: 400;
-      color: #2b2b2b;
-      margin: 0;
-      line-height: 1.48;
+      color: #333333;
+      margin: 0 auto;
+      max-width: 148mm;
+      line-height: 1.5;
       text-align: center;
     }
 
-    /* Bloco de natureza do trabalho (padrão folha de rosto ABNT) */
+    .cover-local {
+      font-size: 10.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #111111;
+      letter-spacing: 0.04em;
+    }
+
+    .cover-local p {
+      margin: 1mm 0;
+      text-align: center;
+    }
+
+    /* ==================== 2. FOLHA DE ROSTO & SUMÁRIO ==================== */
+    .front-matter {
+      page-break-after: always;
+    }
+
     .nature-block {
-      width: 58%;
-      margin-left: auto;
-      margin-top: 8mm;
-      font-size: 9.4pt;
-      line-height: 1.45;
-      color: #222222;
-      border-left: 1.2pt solid #333333;
+      width: 62%;
+      margin: 4mm 0 10mm auto;
       padding-left: 4.5mm;
+      border-left: 1.2pt solid #222222;
+      font-size: 9.8pt;
+      line-height: 1.48;
+      color: #222222;
       text-align: justify;
     }
 
     .nature-block p {
       margin: 0 0 2.5mm 0;
-      text-align: justify;
     }
 
-    .cover-meta {
-      margin-top: 14mm;
-      border-top: 0.7pt solid #cccccc;
-      padding-top: 4.5mm;
-      font-size: 9.2pt;
-      color: #333333;
+    .project-card {
+      border: 0.7pt solid #cccccc;
+      background: #fafafa;
+      padding: 4.5mm 5.5mm;
+      margin: 0 0 10mm 0;
+      font-size: 9.8pt;
     }
 
-    .cover-meta p {
-      margin: 1.2mm 0;
+    .project-card h2 {
+      margin: 0 0 2.5mm 0;
+      font-size: 10.2pt;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #000000;
+    }
+
+    .project-card p {
+      margin: 1.5mm 0;
       text-align: left;
     }
 
-    .cover-local {
-      text-align: center;
-      font-size: 10pt;
+    .toc-title {
+      font-size: 12.5pt;
       font-weight: 700;
-      color: #111111;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-top: 14mm;
+      border-bottom: 0.9pt solid #111111;
+      padding-bottom: 2mm;
+      margin: 4mm 0 4mm 0;
+      letter-spacing: 0.03em;
     }
 
-    .cover-local p {
-      margin: 0.8mm 0;
-      text-align: center;
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 10pt;
     }
 
-    /* ==================== TIPOGRAFIA ACADÊMICA ==================== */
+    .toc-list li {
+      padding: 1.6mm 0;
+      border-bottom: 0.4pt dotted #cccccc;
+      text-align: left;
+      margin: 0;
+    }
+
+    .toc-list li.toc-main {
+      font-weight: 700;
+      color: #000000;
+      padding-top: 2.8mm;
+    }
+
+    .toc-list li.toc-sub {
+      padding-left: 5mm;
+      color: #333333;
+      font-size: 9.5pt;
+    }
+
+    /* ==================== SEÇÕES E TIPOGRAFIA ==================== */
+    .chapter {
+      page-break-before: always;
+    }
+
     h1.section-title {
-      font-size: 12.2pt;
+      font-size: 13pt;
       font-weight: 700;
       text-transform: uppercase;
       color: #000000;
-      border-bottom: 0.9pt solid #222222;
-      padding-bottom: 1.6mm;
-      margin: 7mm 0 4mm 0;
+      border-bottom: 1pt solid #111111;
+      padding-bottom: 2mm;
+      margin: 0 0 5mm 0;
       letter-spacing: 0.02em;
       page-break-after: avoid;
     }
 
-    section:first-of-type + section h1.section-title {
-      margin-top: 0;
-    }
-
     h2 {
-      font-size: 10.5pt;
+      font-size: 11pt;
       font-weight: 700;
       color: #111111;
-      margin: 4.8mm 0 2mm 0;
+      margin: 6mm 0 2.5mm 0;
       page-break-after: avoid;
     }
 
     h3 {
-      font-size: 9.9pt;
+      font-size: 10.2pt;
       font-weight: 700;
       color: #222222;
-      margin: 3.4mm 0 1.4mm 0;
+      margin: 4.5mm 0 2mm 0;
       page-break-after: avoid;
     }
 
     p {
-      margin: 0 0 3mm 0;
+      margin: 0 0 3.2mm 0;
       text-align: justify;
     }
 
     ul, ol {
-      margin: 1.5mm 0 3.5mm 0;
+      margin: 1.5mm 0 4mm 0;
       padding-left: 6mm;
     }
 
     li {
-      margin-bottom: 1.6mm;
+      margin-bottom: 1.8mm;
       text-align: justify;
-    }
-
-    code {
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 9pt;
-      background: #f4f4f4;
-      padding: 0.2mm 1.2mm;
-      border: 0.4pt solid #dddddd;
-      color: #111111;
     }
 
     a {
@@ -243,54 +275,53 @@
       text-decoration: underline;
     }
 
-    /* ==================== BLOCOS DE CITAÇÃO / CENÁRIOS ==================== */
+    /* ==================== BLOCOS ACADÊMICOS ==================== */
     .academic-box {
-      background: #fafafa;
-      border-left: 2pt solid #333333;
-      border-top: 0.5pt solid #dddddd;
-      border-right: 0.5pt solid #dddddd;
-      border-bottom: 0.5pt solid #dddddd;
-      padding: 3.2mm 4.2mm;
-      margin: 3mm 0 4.2mm 0;
-      font-size: 9.7pt;
+      background: #f9f9f9;
+      border: 0.6pt solid #d4d4d4;
+      border-left: 2.2pt solid #222222;
+      padding: 3.5mm 4.5mm;
+      margin: 3.5mm 0 4.5mm 0;
+      font-size: 9.8pt;
       page-break-inside: avoid;
     }
 
     .academic-box p {
-      margin: 0 0 1.6mm 0;
+      margin: 0 0 1.8mm 0;
     }
 
     .academic-box p:last-child {
       margin-bottom: 0;
     }
 
-    /* ==================== TABELAS ACADÊMICAS (ESTILO BOOKTABS / ABNT) ==================== */
+    /* ==================== TABELAS LIMPAS (ABNT / BOOKTABS) ==================== */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 3mm 0 5mm 0;
-      font-size: 9pt;
-      line-height: 1.4;
-      page-break-inside: auto;
+      margin: 3.5mm 0 5.5mm 0;
+      font-size: 9.2pt;
+      line-height: 1.42;
     }
 
-    tr { page-break-inside: avoid; }
+    tr {
+      page-break-inside: avoid;
+    }
 
     th {
       background: #f2f2f2;
       color: #000000;
       text-align: left;
       font-weight: 700;
-      padding: 2mm 2.5mm;
+      padding: 2.3mm 2.8mm;
       border-top: 1.1pt solid #111111;
       border-bottom: 0.8pt solid #111111;
       border-left: 0.5pt solid #cccccc;
       border-right: 0.5pt solid #cccccc;
-      font-size: 8.4pt;
+      font-size: 8.7pt;
     }
 
     td {
-      padding: 1.8mm 2.5mm;
+      padding: 2.1mm 2.8mm;
       border-bottom: 0.5pt solid #cccccc;
       border-left: 0.5pt solid #dcdcdc;
       border-right: 0.5pt solid #dcdcdc;
@@ -304,101 +335,86 @@
 
     .status-label {
       font-weight: 700;
-      color: #111111;
+      color: #000000;
       text-transform: uppercase;
       font-size: 8pt;
       letter-spacing: 0.02em;
     }
 
-    /* ==================== FIGURAS ==================== */
+    /* ==================== FIGURAS DO PROTÓTIPO ==================== */
     .figure {
       border: 0.6pt solid #cccccc;
       padding: 3.5mm;
-      margin: 3.5mm 0 5mm 0;
+      margin: 4mm 0 5.5mm 0;
       background: #ffffff;
       page-break-inside: avoid;
       text-align: center;
     }
 
     .figure img {
-      max-width: 100%;
-      max-height: 108mm;
+      width: 100%;
+      max-height: 86mm;
       object-fit: contain;
-      border: 0.5pt solid #d4d4d4;
+      border: 0.5pt solid #d8d8d8;
+      display: block;
+      margin: 0 auto;
     }
 
-    .figure-grid {
+    .figure-pair {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4mm;
       align-items: start;
     }
 
-    .figure-caption {
-      font-size: 8.6pt;
-      color: #333333;
-      margin-top: 2.4mm;
-      text-align: center;
-      line-height: 1.38;
+    .figure-pair img {
+      max-height: 106mm;
     }
 
-    .phase-break { margin-top: 6mm; }
+    .figure-caption {
+      font-size: 8.7pt;
+      color: #333333;
+      margin-top: 2.5mm;
+      text-align: center;
+      line-height: 1.4;
+    }
 
     .refs p {
-      font-size: 8.8pt;
-      padding-left: 0;
-      margin-bottom: 1.3mm;
+      font-size: 9.5pt;
+      margin-bottom: 2.5mm;
       text-align: left;
-      color: #222222;
-      line-height: 1.35;
+      color: #1a1a1a;
+      line-height: 1.45;
     }
   </style>
 </head>
 <body>
 
-  <!-- ==================== CAPA OFICIAL UNIFAN ==================== -->
+  <!-- ==================== PÁGINA 1: CAPA ==================== -->
   <section class="cover">
     <div>
       <div class="inst-header">
-        <img class="logo-unifan" src="img/unifan_image2.png" alt="Logo UNIFAN — Centro Universitário Alfredo Nasser" />
-        <img class="logo-nead" src="img/unifan_image1.png" alt="Logo NEaD — Núcleo de Educação a Distância" />
+        <img class="logo-unifan" src="img/unifan_image2.png" alt="Logo UNIFAN" />
+        <img class="logo-nead" src="img/unifan_image1.png" alt="Logo NEaD" />
       </div>
 
       <div class="inst-text">
         <p class="uni">Centro Universitário Alfredo Nasser — UNIFAN</p>
-        <p class="dept">Núcleo de Educação a Distância (NEaD) — Disciplina: Interface Homem-Máquina (IHC)</p>
+        <p class="dept">Núcleo de Educação a Distância (NEaD) — Interface Homem-Máquina (IHC)</p>
       </div>
 
       <div class="cover-authors">
         <p>Iago Expedito</p>
         <p>Kelwin Afonso</p>
       </div>
+    </div>
 
-      <div class="cover-title-block">
-        <h1 class="cover-title">Projeto “Medidas &amp; Metas”</h1>
-        <p class="cover-subtitle">
-          Estudo de Caso, Engenharia de Usabilidade, Design de Interação, Prototipação Iterativa,
-          Conformidade LGPD e Avaliação Heurística de Plataforma Web Mobile-First de Avaliação Física
-        </p>
-      </div>
-
-      <div class="nature-block">
-        <p>
-          Relatório técnico referente à Atividade Avaliativa Substitutiva da Prova P2 (2026/2),
-          apresentado à disciplina de Interface Homem-Máquina (IHC) do Centro Universitário Alfredo Nasser (UNIFAN / NEaD).
-        </p>
-        <p>
-          <strong>Parceiro de pesquisa de campo:</strong> Personal Trainer <strong>Italo Cristino</strong>,
-          cujos fluxos reais de avaliação antropométrica, atendimento presencial/online e envio de cards evolutivos
-          via WhatsApp orientaram o levantamento de requisitos e a validação prática do sistema.
-        </p>
-      </div>
-
-      <div class="cover-meta">
-        <p><strong>Aplicação em produção (Vercel):</strong> <a href="https://metas-fit.vercel.app">https://metas-fit.vercel.app</a></p>
-        <p><strong>Repositório de código (GitHub):</strong> <a href="https://github.com/expeditodeviago/metas-fit-">https://github.com/expeditodeviago/metas-fit-</a></p>
-        <p><strong>Infraestrutura de dados:</strong> Supabase (PostgreSQL 17, Google OAuth e Row Level Security)</p>
-      </div>
+    <div class="cover-main">
+      <h1 class="cover-title">Projeto “Medidas &amp; Metas”</h1>
+      <p class="cover-subtitle">
+        Engenharia de Usabilidade, Design de Interação, Prototipação Iterativa de Baixa e Alta Fidelidade
+        e Avaliação Heurística de Plataforma Web Mobile-First de Avaliação Física
+      </p>
     </div>
 
     <div class="cover-local">
@@ -407,530 +423,590 @@
     </div>
   </section>
 
-  <!-- ==================== SEÇÃO 1 ==================== -->
+  <!-- ==================== PÁGINA 2: FOLHA DE ROSTO & SUMÁRIO ==================== -->
+  <section class="front-matter">
+    <div class="nature-block">
+      <p>
+        Relatório técnico-acadêmico apresentado à disciplina de Interface Homem-Máquina (IHC) do Centro Universitário Alfredo Nasser (UNIFAN / NEaD), como requisito avaliativo substitutivo da Prova P2 (2026/2).
+      </p>
+      <p>
+        <strong>Pesquisa de campo e validação de domínio:</strong> conduzidas em parceria com o Personal Trainer <strong>Italo Cristino</strong> e alunos acompanhados em consultoria presencial e online.
+      </p>
+    </div>
+
+    <div class="project-card">
+      <h2>Identificação e Acesso ao Protótipo Funcional</h2>
+      <p><strong>Integrantes da Dupla:</strong> Iago Expedito e Kelwin Afonso</p>
+      <p><strong>Protótipo Funcional Online:</strong> <a href="https://metas-fit.vercel.app">https://metas-fit.vercel.app</a></p>
+      <p><strong>Repositório do Projeto (GitHub):</strong> <a href="https://github.com/expeditodeviago/metas-fit-">https://github.com/expeditodeviago/metas-fit-</a></p>
+      <p><strong>Escopo do Protótipo:</strong> Aplicação web interativa de alta fidelidade (visão do Personal Trainer e Portal Mobile do Aluno), com 2 perfis de exemplo pré-cadastrados para inspeção imediata.</p>
+    </div>
+
+    <div class="toc-title">Sumário</div>
+    <ul class="toc-list">
+      <li class="toc-main">1. Fase: Requisitos e Coleta de Dados</li>
+      <li class="toc-sub">1.1 Contextualização do Problema • 1.2 Stakeholders • 1.3 Triangulação de Dados • 1.4 Requisitos • 1.5 Ética e LGPD</li>
+
+      <li class="toc-main">2. Fase: Design de Interação e Concepção</li>
+      <li class="toc-sub">2.1 Metas de Usabilidade e UX • 2.2 Design Conceitual (Cenários) • 2.3 Affordance • 2.4 Matriz de Acessibilidade</li>
+
+      <li class="toc-main">3. Fase: Prototipação e Detalhamento do Protótipo</li>
+      <li class="toc-sub">3.1 Ciclo de Vida em Espiral • 3.2 Protótipo de Baixa Fidelidade (Wireframes) • 3.3 Protótipo Vertical de Alta Fidelidade (Tela a Tela) • 3.4 Evolução Iterativa (Antes × Depois)</li>
+
+      <li class="toc-main">4. Fase: Avaliação de Usabilidade</li>
+      <li class="toc-sub">4.1 Avaliação Heurística (10 Heurísticas de Nielsen) • 4.2 Testes com Usuários (Thinking Aloud) • 4.3 Barreiras vs. Ruídos</li>
+
+      <li class="toc-main">5. Conclusão e Referências Bibliográficas</li>
+    </ul>
+  </section>
+
+  <!-- ==================== SEÇÃO 1: REQUISITOS E COLETA DE DADOS ==================== -->
   <section>
     <h1 class="section-title">1. Fase: Requisitos e Coleta de Dados</h1>
 
+    <h2>1.1 Contextualização e Identificação das Necessidades</h2>
     <p>
-      O sistema <strong>Medidas &amp; Metas</strong> foi concebido a partir de uma demanda real identificada em pesquisa de campo conduzida junto ao personal trainer <strong>Italo Cristino</strong>. No acompanhamento presencial e online de seus alunos, observou-se que os dados de avaliação física permaneciam dispersos em planilhas pouco amigáveis em telas pequenas ou em fichas estáticas difíceis de interpretar pelo aluno. O objetivo central de Interface Homem-Máquina (IHC) consistiu em projetar, implementar, publicar em produção e avaliar uma plataforma web <em>mobile-first</em> acessível, segura e motivadora para registro periódico de avaliações físicas e acompanhamento visual da evolução corporal.
+      O projeto <strong>Medidas &amp; Metas</strong> surgiu de uma necessidade real observada na rotina profissional do personal trainer <strong>Italo Cristino</strong>. No acompanhamento físico presencial e remoto, identificou-se que o uso de planilhas tradicionais ou fichas em PDF estático gerava quatro problemas recorrentes de interação humano-computador:
     </p>
+    <ol>
+      <li><strong>Atrito na coleta em dispositivos móveis:</strong> digitar dezenas de medidas decimais em células pequenas de planilhas no celular ocasionava erros frequentes de vírgula e retrabalho.</li>
+      <li><strong>Dificuldade de interpretação pelo aluno:</strong> tabelas numéricas isoladas desmotivam alunos em recomposição corporal (quando o peso na balança estabiliza, mas há redução real de cintura e ganho de massa muscular).</li>
+      <li><strong>Esforço manual de comunicação visual:</strong> montar comparativos de evolução (“antes e depois” de medidas) manualmente em editores gráficos consumia horas semanais do profissional.</li>
+      <li><strong>Barreira de entrada em sistemas complexos:</strong> telas iniciais vazias ou cadastros burocráticos dificultam a adoção imediata por novos avaliadores e alunos.</li>
+    </ol>
 
-    <h2>1.1 Identificação de Stakeholders</h2>
+    <h2>1.2 Identificação de Stakeholders</h2>
     <table>
       <thead>
         <tr>
-          <th style="width:21%;">Categoria</th>
-          <th style="width:27%;">Perfil / Papel</th>
-          <th style="width:52%;">Necessidades, Metas e Relação com a Interface</th>
+          <th style="width:22%;">Categoria</th>
+          <th style="width:28%;">Perfil Representativo</th>
+          <th style="width:50%;">Papel e Necessidades na Interface</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Usuários Primários</strong></td>
-          <td>Alunos em acompanhamento presencial e consultoria online</td>
-          <td>Acompanhar sua evolução física diretamente pelo celular sem precisar criar senha complexa, compreender visualmente onde perderam medidas ou ganharam massa muscular e baixar o Card PNG oficial para compartilhar no WhatsApp.</td>
+          <td>Alunos acompanhados em consultoria presencial e online</td>
+          <td>Consultar sua evolução pelo smartphone sem criar senhas complexas, visualizar em um mapa corporal onde perderam medidas ou ganharam massa magra e baixar o Card PNG para compartilhar no WhatsApp.</td>
         </tr>
         <tr>
           <td><strong>Usuários Secundários</strong></td>
-          <td><strong>Personal Trainer Italo Cristino</strong> e demais avaliadores físicos</td>
-          <td>Entrar rapidamente com conta Google, explorar o sistema já com perfis de exemplo no primeiro acesso, registrar 16 indicadores corporais no celular/tablet com prevenção de erros de digitação, gerenciar links individuais e exportar cards padronizados.</td>
+          <td>Personal Trainer <strong>Italo Cristino</strong> e avaliadores físicos</td>
+          <td>Registrar avaliações completas com rapidez durante o atendimento, contar com alertas contra erros de digitação, gerenciar links individuais de acesso e gerar cards padronizados em segundos.</td>
         </tr>
         <tr>
           <td><strong>Outros Stakeholders</strong></td>
-          <td>Gestores de estúdios de treinamento e docentes de Saúde/Ed. Física</td>
-          <td>Assegurar consistência dos protocolos antropométricos (IMC, % gordura, musculatura, gordura visceral e perimetria), isolamento de privacidade por conta (RLS), conformidade com a LGPD e acessibilidade inclusiva.</td>
+          <td>Coordenadores de estúdios e docentes de Educação Física / Saúde</td>
+          <td>Garantir padronização antropométrica (IMC, composição corporal e 10 circunferências), privacidade de dados sensíveis (LGPD) e acessibilidade visual e motora.</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>1.2 Identificação das Necessidades do Domínio</h2>
+    <h2>1.3 Técnicas de Coleta de Dados (Triangulação)</h2>
     <p>
-      A partir do diagnóstico realizado com o personal trainer <strong>Italo Cristino</strong>, consolidaram-se quatro dores críticas do processo tradicional: (1) <strong>atrito operacional na coleta</strong> — digitar medidas decimais em planilhas móveis causava erros de vírgula e retrabalho; (2) <strong>baixa clareza na leitura pelo aluno</strong> — números isolados de peso desmotivam quem está em recomposição corporal (redução de cintura com manutenção do peso total); (3) <strong>esforço manual na produção de artes</strong> — montar comparativos visuais para WhatsApp consumia horas semanais do treinador; e (4) <strong>atrito de entrada para novos avaliadores</strong> — processos com chaves intermediárias ou telas vazias dificultavam a compreensão imediata da ferramenta no primeiro acesso.
+      Para fundamentar os requisitos com precisão empírica, aplicou-se a <strong>triangulação de dados</strong> combinando três fontes complementares:
     </p>
+    <ul>
+      <li><strong>Entrevista Semiestruturada com Especialista:</strong> realizada com o personal trainer Italo Cristino para mapear os 16 indicadores utilizados em suas avaliações reais, a lógica comparativa <em>Inicial → Anterior → Atual</em> e os formatos ideais de imagem para WhatsApp (4:5 e 9:16).</li>
+      <li><strong>Grupo de Foco com Alunos Praticantes:</strong> conversa estruturada com alunos para compreender como leem resultados físicos no celular, quais métricas geram maior dúvida ou ansiedade e como preferem acompanhar suas metas.</li>
+      <li><strong>Análise Documental e Normativa:</strong> revisão dos protocolos antropométricos (classificação de IMC da OMS e simetria bilateral de membros), das diretrizes de acessibilidade web (WCAG 2.1) e do princípio de minimização de dados da LGPD (Lei nº 13.709/2018).</li>
+    </ul>
 
-    <h2>1.3 Estratégia de Coleta de Dados por Triangulação</h2>
-    <p>
-      Para garantir aderência às demandas reais e reduzir vieses de interpretação, empregou-se a técnica de <strong>triangulação de dados</strong> em três frentes complementares:
-    </p>
-    <ol>
-      <li>
-        <strong>Entrevista Semiestruturada com o Personal Trainer Italo Cristino:</strong> Mapeamento completo da ficha física utilizada na prática (peso, IMC, gordura corporal, musculatura, calorias necessárias, idade corporal, gordura visceral e 10 circunferências bilaterais), validação do comparativo automático <em>Inicial → Anterior → Atual</em> e dos formatos de exportação 4:5 e 9:16.
-      </li>
-      <li>
-        <strong>Grupo de Foco com Alunos Praticantes:</strong> Sessão exploratória para investigar como os alunos leem resultados de bioimpedância no smartphone, identificar fatores emocionais relacionados ao peso corporal e verificar preferências de leitura em tema claro/escuro e interação tátil.
-      </li>
-      <li>
-        <strong>Análise de Processos, Protocolos e Normas Legais:</strong> Revisão dos cálculos antropométricos padronizados (IMC segundo a OMS, regras semânticas de melhora por indicador), diretrizes de acessibilidade WCAG 2.1 e requisitos de transparência e consentimento da LGPD (Lei nº 13.709/2018).
-      </li>
-    </ol>
-
-    <h2>1.4 Requisitos Funcionais e Não Funcionais Consolidados</h2>
+    <h2>1.4 Requisitos Consolidados da Interface</h2>
     <table>
       <thead>
         <tr>
-          <th style="width:11%;">Código</th>
-          <th style="width:24%;">Requisito</th>
-          <th style="width:65%;">Descrição Funcional / Critério de Aceitação</th>
+          <th style="width:12%;">Código</th>
+          <th style="width:26%;">Requisito</th>
+          <th style="width:62%;">Especificação Voltada à Usabilidade</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>RF01</strong></td>
-          <td>Acesso Direto Google OAuth &amp; Multi-Tenant RLS</td>
-          <td>Login imediato do treinador via conta Google no Supabase Auth (sem barreira de chave burocrática), com isolamento estrito de alunos e avaliações por <code>user_id</code> via <em>Row Level Security</em> no PostgreSQL.</td>
+          <td>Acesso Rápido e Onboarding Guiado</td>
+          <td>Login em um clique com conta Google, criação automática de 2 alunos-exemplo (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>) e tutorial interativo de primeiro acesso para treinador e aluno.</td>
         </tr>
         <tr>
           <td><strong>RF02</strong></td>
-          <td>Onboarding com Exemplos &amp; Tutorial Guiado</td>
-          <td>No primeiro acesso de novos treinadores, a RPC idempotente <code>seed_onboarding_examples()</code> cria 2 perfis de exemplo (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>) com 3 avaliações cada, acompanhados de um <strong>Tutorial Interativo de Primeiro Login</strong> (<code>OnboardingTutorial.tsx</code>) específico para o Treinador (5 passos) e para o Aluno (4 passos), reabrível a qualquer momento.</td>
+          <td>Coleta Antropométrica Guiada</td>
+          <td>Formulário mobile com teclado numérico decimal, cálculo instantâneo de IMC e exibição do valor da avaliação anterior abaixo de cada campo para referência imediata.</td>
         </tr>
         <tr>
           <td><strong>RF03</strong></td>
-          <td>Portal Individual do Aluno</td>
-          <td>Acesso somente leitura via código individual (ex.: <code>MM-XXXXXX</code>) ou link direto (<code>?aluno=CODIGO</code>) servido pela RPC controlada <code>get_client_portal()</code>, com pausa e regeneração de código pelo treinador.</td>
+          <td>Prevenção de Erros Clínicos</td>
+          <td>Detecção automática de medidas fora da faixa fisiológica (ex.: variação brusca de peso &gt; 12 kg ou erro de vírgula), exigindo confirmação explícita em modal antes de gravar.</td>
         </tr>
         <tr>
           <td><strong>RF04</strong></td>
-          <td>Formulário Otimizado Mobile</td>
-          <td>Campos numéricos com teclado decimal (<code>inputMode="decimal"</code>), cálculo automático de IMC via aplicação e gatilho SQL, exibindo o valor da avaliação anterior em cada campo.</td>
+          <td>Mapa Anatômico Interativo</td>
+          <td>Silhueta masculina e feminina (vistas Frente e Costas) com destaque cromático e textual (verde = redução/definição; laranja = ganho muscular), inspeção por toque e linha do tempo animada.</td>
         </tr>
         <tr>
           <td><strong>RF05</strong></td>
-          <td>Prevenção de Erros Clínicos</td>
-          <td>Interceptação automática de valores atípicos (ex.: variação de peso &gt; 12 kg, gordura &lt; 4% ou &gt; 55%, cintura fora da faixa fisiológica) com modal de confirmação explícita antes de salvar.</td>
+          <td>Card Evolutivo Oficial (PNG)</td>
+          <td>Geração instantânea de card comparativo em alta definição nos formatos 4:5 (Feed/Chat) e 9:16 (Stories/Status), com temas escuro e claro prontos para envio no WhatsApp.</td>
         </tr>
         <tr>
           <td><strong>RF06</strong></td>
-          <td>Mapa Anatômico Interativo</td>
-          <td>Silhueta anatômica masculina e feminina (Frente e Costas) com destaque semântico verde (redução/definição) e laranja (ganho/volume), inspeção por toque nos grupos musculares e linha do tempo animada.</td>
-        </tr>
-        <tr>
-          <td><strong>RF07</strong></td>
-          <td>Exportação Oficial Card PNG</td>
-          <td>Geração de card em alta resolução (3x) nos formatos 4:5 (Feed/Chat) e 9:16 (Status/Stories) nos temas Dark Pro e Clássico, com compartilhamento rápido para WhatsApp.</td>
+          <td>Portal Individual do Aluno</td>
+          <td>Acesso somente leitura via código curto individual ou link direto, podendo ser pausado ou regenerado pelo personal trainer a qualquer momento.</td>
         </tr>
         <tr>
           <td><strong>RNF01</strong></td>
-          <td>Acessibilidade &amp; Responsividade</td>
-          <td>Layout mobile-first sem rolagem horizontal, zoom livre no viewport (WCAG 1.4.4), controles globais <strong>A+</strong>, <strong>Alto Contraste</strong>, <strong>Tema Claro/Escuro</strong>, navegação por teclado e modal <strong>Ajuda (?)</strong>.</td>
-        </tr>
-        <tr>
-          <td><strong>RNF02</strong></td>
-          <td>Privacidade, Cookies e LGPD</td>
-          <td>Banner de consentimento de cookies e armazenamento local na primeira visita (<em>Aceitar todos</em>, <em>Apenas essenciais</em> e <em>Preferências</em>), acompanhado de modal completo de Política de Privacidade, Tabela de Cookies e Termos de Uso.</td>
-        </tr>
-        <tr>
-          <td><strong>RNF03</strong></td>
-          <td>Publicação Contínua (CI/CD)</td>
-          <td>Aplicação hospedada em HTTPS na Vercel (<a href="https://metas-fit.vercel.app"><code>https://metas-fit.vercel.app</code></a>) com reescrita SPA (<code>vercel.json</code>) e deploy automático integrado ao GitHub.</td>
+          <td>Acessibilidade e Privacidade</td>
+          <td>Controles globais de Texto Ampliado (<strong>A+</strong>), <strong>Alto Contraste</strong>, <strong>Tema Claro/Escuro</strong>, zoom livre no celular e banner transparente de consentimento de cookies e minimização LGPD.</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>1.5 Aspectos Éticos, Consentimento e LGPD</h2>
+    <h2>1.5 Aspectos Éticos e Proteção de Dados</h2>
     <div class="academic-box">
       <p>
-        <strong>Princípio da Autonomia, Consentimento e Proteção de Dados:</strong> Tanto na entrevista com o personal trainer <strong>Italo Cristino</strong> quanto nos testes de usabilidade com alunos, respeitou-se integralmente o <strong>Princípio da Autonomia</strong> mediante Termo de Consentimento Livre e Esclarecido (TCLE), reforçando que o objeto avaliado era exclusivamente a interface, nunca o corpo ou desempenho físico dos voluntários.
-      </p>
-      <p>
-        Na aplicação oficial publicada, incorporou-se conformidade direta com a <strong>LGPD (Lei nº 13.709/2018)</strong> e o <strong>princípio da necessidade / minimização de dados (Art. 6º, III)</strong>: coleta apenas dos dados físicos indispensáveis (removendo campos não utilizados como tom de pele e e-mail do aluno), banner explícito de consentimento de cookies/armazenamento local sem rastreadores publicitários, filtragem de payload na RPC <code>get_client_portal()</code> (sem expor telefone, e-mail ou UUIDs internos ao portal público), aviso informativo de saúde, isolamento multi-tenant via RLS e exclusão definitiva em cascata.
+        <strong>Princípio da Autonomia e Minimização (TCLE e LGPD):</strong> Nas entrevistas e testes com usuários, aplicou-se o Termo de Consentimento Livre e Esclarecido (TCLE), deixando explícito aos participantes que <em>o objeto em avaliação era estritamente a usabilidade da interface, e jamais o corpo ou desempenho físico individual</em>, com anonimização completa dos voluntários (P1–P6). Na aplicação publicada, coleta-se apenas o mínimo indispensável à avaliação física (removendo atributos desnecessários como tom de pele ou e-mail do aluno), ocultando contatos no Portal Público e oferecendo controle transparente de cookies e exclusão definitiva.
       </p>
     </div>
   </section>
 
-  <!-- ==================== SEÇÃO 2 ==================== -->
-  <section class="phase-break">
+  <!-- ==================== SEÇÃO 2: DESIGN DE INTERAÇÃO E CONCEPÇÃO ==================== -->
+  <section class="chapter">
     <h1 class="section-title">2. Fase: Design de Interação e Concepção</h1>
 
     <h2>2.1 Metas de Usabilidade e Metas de Experiência do Usuário (UX)</h2>
     <table>
       <thead>
         <tr>
-          <th style="width:18%;">Dimensão</th>
-          <th style="width:23%;">Meta Definida</th>
-          <th style="width:59%;">Tradução Concreta na Interface do Medidas &amp; Metas</th>
+          <th style="width:19%;">Categoria</th>
+          <th style="width:24%;">Meta Estabelecida</th>
+          <th style="width:57%;">Aplicação Prática no Design do Medidas &amp; Metas</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Usabilidade</strong></td>
           <td>Eficácia</td>
-          <td>O treinador entra com 1 clique no Google, registra uma avaliação completa de 16 medidas e gera o Card PNG oficial em menos de 2 minutos no smartphone; o aluno acessa sua evolução pelo link direto sem instruções presenciais.</td>
+          <td>Permitir que o personal registre as 16 medidas corporais e gere o Card PNG em menos de 2 minutos pelo smartphone, e que o aluno consulte seus avanços sem depender de instruções externas.</td>
         </tr>
         <tr>
           <td><strong>Usabilidade</strong></td>
-          <td>Segurança</td>
-          <td>Modal preventivo para valores fora da faixa fisiológica, confirmação explícita antes de exclusões irreversíveis, isolamento estrito de dados no banco via RLS e controle de consentimento de cookies/privacidade.</td>
+          <td>Segurança de Uso</td>
+          <td>Evitar gravações acidentais de valores absurdos por meio do modal preventivo de conferência, exigir confirmação dupla antes de excluir perfis e isolar os dados de cada profissional.</td>
         </tr>
         <tr>
           <td><strong>Usabilidade</strong></td>
           <td>Facilidade de Aprendizado</td>
-          <td>Dois alunos de exemplo criados automaticamente no primeiro login (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>), 3 abas objetivas no Portal do Aluno (<code>Evolução</code>, <code>Meu Card</code>, <code>Medidas</code>) e botão permanente <strong>Ajuda (?)</strong> contextual.</td>
+          <td>Eliminar a “tela vazia” inicial com 2 perfis demonstrativos completos, apresentar um tutorial passo a passo no primeiro acesso e organizar o Portal do Aluno em apenas 3 abas intuitivas.</td>
         </tr>
         <tr>
           <td><strong>Experiência (UX)</strong></td>
-          <td>Motivadora e Clara</td>
-          <td>Mensagens de progresso ancoradas em dados reais (ex.: redução de cintura em centímetros e ganho percentual de massa muscular), contraste esportivo legível e visualização corporal intuitiva que valoriza a constância do aluno.</td>
+          <td>Motivadora e Empática</td>
+          <td>Traduzir dados frios em conquistas compreensíveis (ex.: destaque positivo para redução de cintura e idade corporal), utilizando identidade visual esportiva limpa que valoriza a constância do aluno.</td>
         </tr>
       </tbody>
     </table>
 
     <h2>2.2 Design Conceitual Baseado em Cenários</h2>
     <div class="academic-box">
-      <p><strong>Cenário 1 — Avaliação Física Presencial pelo Personal Trainer:</strong></p>
+      <p><strong>Cenário 1 — Registro de Reavaliação Física pelo Personal Trainer:</strong></p>
       <p>
-        <strong>Ator:</strong> Personal Trainer Italo Cristino durante reavaliação bimestral de um aluno.
+        <strong>Ator e Contexto:</strong> Italo Cristino finaliza a avaliação presencial de uma aluna na academia utilizando seu smartphone.
       </p>
       <p>
-        <strong>Contexto:</strong> Ao término da sessão na academia, utilizando o smartphone acessando <a href="https://metas-fit.vercel.app"><code>https://metas-fit.vercel.app</code></a> com sua conta Google já autenticada.
-      </p>
-      <p>
-        <strong>Ação e Fluxo:</strong> Italo abre o perfil do aluno, toca em <strong>Nova Avaliação</strong> e preenche peso, composição corporal e circunferências orientado pelos valores da avaliação anterior exibidos abaixo de cada campo. O sistema calcula o IMC automaticamente e aciona o alerta preventivo caso algum número fuja do padrão clínico (evitando erros de vírgula). Ao salvar, exibe o visualizador do <strong>Card PNG</strong> (4:5 ou 9:16, Dark Pro ou Clássico) pronto para compartilhamento no WhatsApp.
+        <strong>Objetivo e Ação:</strong> Registrar rapidamente as novas medidas sem erro de digitação e entregar o comparativo visual. Italo seleciona a aluna no painel, toca em <em>Nova Avaliação</em> e preenche os campos guiando-se pelo valor <em>Anterior</em> exibido logo abaixo de cada entrada. Ao digitar acidentalmente “623” em vez de “62,3 kg”, o modal preventivo alerta sobre a variação atípica antes de salvar. Corrigido o valor, o card 4:5 é gerado automaticamente e enviado no WhatsApp da aluna.
       </p>
     </div>
 
     <div class="academic-box">
-      <p><strong>Cenário 2 — Acompanhamento Interativo pelo Aluno no Celular:</strong></p>
+      <p><strong>Cenário 2 — Consulta Autônoma e Interativa pela Aluna:</strong></p>
       <p>
-        <strong>Ator:</strong> Aluna acompanhada em consultoria de recomposição corporal.
+        <strong>Ator e Contexto:</strong> A aluna recebe no WhatsApp o link individual do seu portal e abre pelo celular em casa.
       </p>
       <p>
-        <strong>Contexto:</strong> Abre pelo celular o link exclusivo (<code>?aluno=CODIGO</code>) recebido pelo WhatsApp, escolhe sua preferência no banner de cookies/LGPD e acessa imediatamente seu painel somente leitura.
-      </p>
-      <p>
-        <strong>Ação e Fluxo:</strong> Visualiza o resumo de metas e variações, alterna entre as vistas <strong>Frente</strong> e <strong>Costas</strong> no mapa anatômico interativo, toca na região abdominal para comparar <code>Inicial → Atual</code> e aciona <strong>Animar Evolução</strong> na linha do tempo cronológica.
+        <strong>Objetivo e Ação:</strong> Compreender onde seu corpo evoluiu nos últimos quatro meses. Guiada no primeiro acesso pelo tutorial rápido de 4 passos, ela visualiza os destaques de progresso no topo, alterna o mapa anatômico entre <em>Frente</em> e <em>Costas</em>, toca sobre o abdômen destacado em verde para ler a redução exata de cintura (81,0 → 73,5 cm) e aciona <em>Animar Evolução</em> na linha do tempo.
       </p>
     </div>
 
-    <h2>2.3 Design Físico: Affordance e Acessibilidade</h2>
-    <h3>A. Affordance Metafórica e Explícita</h3>
+    <h2>2.3 Design Físico: Affordance e Matriz de Acessibilidade</h2>
     <ul>
-      <li>
-        <strong>Affordance Metafórica:</strong> O <strong>mapa anatômico humano</strong> (masculino e feminino, frente e costas) sugere o toque direto nos grupos musculares para inspecionar medidas reais em centímetros; a linha do tempo deslizante com controle <code>Animar Evolução</code> comunica progressão cronológica até a projeção de meta.
-      </li>
-      <li>
-        <strong>Affordance Explícita:</strong> Ações primárias nomeadas com verbos diretos — <code>Entrar com Google</code>, <code>Acessar Evolução</code>, <code>Novo Aluno</code>, <code>Nova Avaliação</code>, <code>Salvar e Gerar Card</code> e <code>Compartilhar no WhatsApp</code> — reduzem ambiguidade cognitiva.
-      </li>
+      <li><strong>Affordance Metafórica:</strong> A representação anatômica humana (frente e costas) sugere imediatamente o toque direto sobre os músculos para inspecionar medidas; a barra cronológica com botão <em>Animar Evolução</em> remete a um reprodutor de mídia para avançar no tempo até a meta.</li>
+      <li><strong>Affordance Explícita:</strong> Rótulos claros orientados à ação (<em>Entrar com Google</em>, <em>Novo Aluno</em>, <em>Nova Avaliação</em>, <em>Abrir Meu Card PNG</em>, <em>Compartilhar no WhatsApp</em>) indicam sem ambiguidade o resultado de cada clique.</li>
     </ul>
 
-    <h3>B. Matriz de Acessibilidade (Permanente, Temporária e Situacional)</h3>
     <table>
       <thead>
         <tr>
-          <th style="width:19%;">Tipo de Limitação</th>
-          <th style="width:31%;">Situação no Uso Real</th>
-          <th style="width:50%;">Recursos Implementados no Medidas &amp; Metas</th>
+          <th style="width:20%;">Contexto de Limitação</th>
+          <th style="width:32%;">Situação Real Prevista</th>
+          <th style="width:48%;">Solução de Acessibilidade Incorporada</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Permanente</strong></td>
-          <td>Usuário com baixa visão ou uso de leitor de tela</td>
-          <td>Controles globais <strong>A+</strong> (ampliação tipográfica para <code>112,5%</code>) e <strong>Alto Contraste</strong>; zoom por pinça liberado no <code>viewport</code> (WCAG 1.4.4); link <em>Ir para o conteúdo principal</em>; <code>role="dialog"</code>, <code>aria-modal</code>, <code>role="switch"</code> e <code>aria-label</code> em ícones e modais.</td>
+          <td>Baixa visão, daltonismo ou navegação por leitor de tela</td>
+          <td>Botões persistentes <strong>A+</strong> (ampliação global da fonte) e <strong>Alto Contraste</strong>; zoom por pinça desbloqueado no celular; legendas textuais e setas associadas às cores verde/laranja; atributos semânticos ARIA e atalho para o conteúdo principal.</td>
         </tr>
         <tr>
           <td><strong>Temporária</strong></td>
-          <td>Personal ou aluno operando o celular com apenas uma mão (ex.: segurando fita métrica)</td>
-          <td>Layout <em>mobile-first</em> de coluna única, alvos táteis confortáveis (<code>36–44 px</code>), navegação inferior ao alcance do polegar e operação integral por teclado (<code>Tab</code>, <code>Enter</code>, <code>Esc</code>) com indicador de foco visível.</td>
+          <td>Uso do celular com apenas uma mão (segurando fita métrica ou braço imobilizado)</td>
+          <td>Alvos de toque amplos (mínimo 36–44 px), barra de navegação inferior ao alcance do polegar no mobile e suporte integral a navegação via teclado (<em>Tab</em>, <em>Enter</em>, <em>Setas</em> e <em>Esc</em>).</td>
         </tr>
         <tr>
           <td><strong>Situacional</strong></td>
-          <td>Uso em academia com iluminação intensa, reflexo solar ou ambiente noturno</td>
-          <td>Alternância imediata entre <strong>Tema Claro</strong> e <strong>Tema Escuro</strong> com persistência local, acompanhada de legendas textuais explícitas junto às cores verde/laranja (sem depender exclusivamente de distinção cromática).</td>
+          <td>Academia com iluminação forte, reflexo na tela ou uso noturno</td>
+          <td>Alternância instantânea entre <strong>Tema Escuro</strong> (alto contraste luminoso) e <strong>Tema Claro</strong> em todas as páginas, além de escolha de tema claro/escuro também no Card PNG.</td>
         </tr>
       </tbody>
     </table>
   </section>
 
-  <!-- ==================== SEÇÃO 3 ==================== -->
-  <section class="phase-break">
-    <h1 class="section-title">3. Fase: Prototipação (Processo de Design)</h1>
+  <!-- ==================== SEÇÃO 3: PROTOTIPAÇÃO (EXPANDIDA E DETALHADA) ==================== -->
+  <section class="chapter">
+    <h1 class="section-title">3. Fase: Prototipação e Detalhamento do Protótipo</h1>
 
-    <h2>3.1 Modelo de Ciclo de Vida Adotado</h2>
+    <h2>3.1 Modelo de Ciclo de Vida Iterativo (Espiral / Estrela)</h2>
     <p>
-      Um modelo sequencial em <strong>Cascata</strong> não atenderia adequadamente às demandas do <em>Medidas &amp; Metas</em>, pois aspectos centrais de percepção e usabilidade — como a naturalidade da silhueta anatômica, o comportamento de grades responsivas em smartphones reais e o atrito no primeiro acesso — só se revelam durante testes práticos iterativos. Adotou-se, portanto, o <strong>Ciclo de Vida em Espiral / Estrela</strong>, alternando ciclos curtos de prototipação, avaliação com o personal trainer <strong>Italo Cristino</strong>, ajustes de código e validação em produção.
+      Rejeitou-se o modelo linear em <strong>Cascata</strong> por ser incompatível com interfaces ricas em visualização corporal: aspectos como legibilidade de setas em telas pequenas, aceitação estética da silhueta humana e simplicidade do primeiro acesso exigem experimentação prática contínua. Adotou-se o <strong>Ciclo de Vida em Espiral combinado ao modelo Estrela</strong> (centrado na avaliação constante), percorrendo três ciclos iterativos completos junto ao personal trainer Italo Cristino até consolidar o protótipo funcional de alta fidelidade.
     </p>
 
-    <h2>3.2 Prototipação de Baixa Fidelidade (Wireframes e Fluxo)</h2>
+    <h2>3.2 Prototipação de Baixa Fidelidade (Esboços Estruturais e Fluxo)</h2>
     <p>
-      Inicialmente estruturaram-se wireframes esquemáticos para validar a sequência de avaliação com prevenção de erros, o onboarding imediato via Google e a arquitetura de informação mobile do Portal do Aluno antes da implementação final.
+      Na etapa inicial, construíram-se esboços estruturais (<em>wireframes</em>) de baixa fidelidade para validar a arquitetura da informação, a divisão entre o ambiente do treinador e o ambiente do aluno e o ponto exato de interceptação preventiva de erros no formulário antes de investir no acabamento gráfico:
     </p>
 
     <div class="figure">
-      <svg viewBox="0 0 760 232" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wireframe esquemático de baixa fidelidade do Medidas e Metas">
-        <!-- Quadro Esquerdo -->
-        <rect x="6" y="6" width="368" height="220" fill="#ffffff" stroke="#555555" stroke-width="1" stroke-dasharray="4 3"/>
-        <text x="16" y="23" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#111111">WIREFRAME A — FLUXO DO TREINADOR &amp; PREVENÇÃO DE ERROS</text>
+      <svg viewBox="0 0 760 250" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wireframes de baixa fidelidade do fluxo de tarefas e das telas do protótipo">
+        <!-- Bloco A: Fluxo -->
+        <rect x="6" y="6" width="366" height="238" fill="#fafafa" stroke="#666666" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="18" y="25" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#111111">ESBOÇO A — ÁRVORE DE FLUXO E PREVENÇÃO DE ERRO</text>
 
-        <rect x="18" y="38" width="148" height="34" fill="#f7f7f7" stroke="#222222" stroke-width="1"/>
-        <text x="92" y="53" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.3" font-weight="bold" fill="#111111">1. Login Google OAuth</text>
-        <text x="92" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.4" fill="#444444">Onboarding: 2 alunos exemplo</text>
+        <rect x="20" y="40" width="146" height="36" fill="#ffffff" stroke="#222222" stroke-width="1"/>
+        <text x="93" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.2" font-weight="bold" fill="#111111">1. Entrada &amp; Tutorial</text>
+        <text x="93" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.3" fill="#444444">Google + 2 Alunos Exemplo</text>
 
-        <line x1="166" y1="55" x2="196" y2="55" stroke="#222222" stroke-width="1"/>
-        <polygon points="196,55 191,52 191,58" fill="#222222"/>
+        <line x1="166" y1="58" x2="196" y2="58" stroke="#222222" stroke-width="1"/>
+        <polygon points="196,58 190,55 190,61" fill="#222222"/>
 
-        <rect x="196" y="38" width="164" height="34" fill="#f7f7f7" stroke="#222222" stroke-width="1"/>
-        <text x="278" y="53" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.3" font-weight="bold" fill="#111111">2. Nova Avaliação (Mobile)</text>
-        <text x="278" y="65" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.4" fill="#444444">Referência anterior + teclado dec.</text>
+        <rect x="196" y="40" width="162" height="36" fill="#ffffff" stroke="#222222" stroke-width="1"/>
+        <text x="277" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.2" font-weight="bold" fill="#111111">2. Coleta de 16 Medidas</text>
+        <text x="277" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.3" fill="#444444">Exibe valor anterior + IMC vivo</text>
 
-        <line x1="278" y1="72" x2="278" y2="96" stroke="#222222" stroke-width="1"/>
-        <polygon points="278,96 275,91 281,91" fill="#222222"/>
+        <line x1="277" y1="76" x2="277" y2="104" stroke="#222222" stroke-width="1"/>
+        <polygon points="277,104 274,98 280,98" fill="#222222"/>
 
-        <rect x="196" y="96" width="164" height="36" fill="#efefef" stroke="#111111" stroke-width="1.1"/>
-        <text x="278" y="111" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.3" font-weight="bold" fill="#111111">3. Checagem Preventiva</text>
-        <text x="278" y="123" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.4" fill="#333333">Medida atípica? Modal de confirmação</text>
+        <rect x="196" y="104" width="162" height="40" fill="#eeeeee" stroke="#111111" stroke-width="1.2"/>
+        <text x="277" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.2" font-weight="bold" fill="#000000">3. Trava de Segurança</text>
+        <text x="277" y="133" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.3" fill="#333333">Valor fora da faixa? Pede confirmação</text>
 
-        <line x1="196" y1="114" x2="166" y2="114" stroke="#222222" stroke-width="1"/>
-        <polygon points="166,114 171,111 171,117" fill="#222222"/>
+        <line x1="196" y1="124" x2="166" y2="124" stroke="#222222" stroke-width="1"/>
+        <polygon points="166,124 172,121 172,127" fill="#222222"/>
 
-        <rect x="18" y="96" width="148" height="36" fill="#f7f7f7" stroke="#222222" stroke-width="1"/>
-        <text x="92" y="111" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.3" font-weight="bold" fill="#111111">4. Supabase (RLS + IMC)</text>
-        <text x="92" y="123" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.4" fill="#444444">Isolamento por conta + Trigger SQL</text>
+        <rect x="20" y="104" width="146" height="40" fill="#ffffff" stroke="#222222" stroke-width="1"/>
+        <text x="93" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.2" font-weight="bold" fill="#111111">4. Card Oficial PNG</text>
+        <text x="93" y="133" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.3" fill="#444444">Formatos 4:5 (Feed) e 9:16 (Stories)</text>
 
-        <line x1="92" y1="132" x2="92" y2="158" stroke="#222222" stroke-width="1"/>
-        <polygon points="92,158 89,153 95,153" fill="#222222"/>
+        <line x1="93" y1="144" x2="93" y2="172" stroke="#222222" stroke-width="1"/>
+        <polygon points="93,172 90,166 96,166" fill="#222222"/>
 
-        <rect x="18" y="158" width="342" height="50" fill="#ffffff" stroke="#222222" stroke-width="1"/>
-        <text x="189" y="177" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.5" font-weight="bold" fill="#111111">5. Portal do Aluno (?aluno=CODIGO) &amp; Card PNG 3x</text>
-        <text x="189" y="191" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.6" fill="#444444">Mapa anatômico Frente/Costas + Exportação 4:5 ou 9:16 para WhatsApp</text>
-        <text x="189" y="202" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.2" fill="#555555">Consentimento de Cookies e Privacidade (LGPD) disponível em todas as telas</text>
+        <rect x="20" y="172" width="338" height="54" fill="#ffffff" stroke="#222222" stroke-width="1"/>
+        <text x="189" y="191" text-anchor="middle" font-family="Arial, sans-serif" font-size="8.5" font-weight="bold" fill="#111111">5. Portal Exclusivo do Aluno (Link Direto pelo WhatsApp)</text>
+        <text x="189" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.5" fill="#444444">Abas: [ Evolução ]  [ Meu Card ]  [ Medidas ] • Toque direto nos músculos</text>
+        <text x="189" y="217" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.2" fill="#555555">Barra permanente no topo: Texto A+ | Alto Contraste | Tema | Ajuda (?)</text>
 
-        <!-- Quadro Direito -->
-        <rect x="392" y="6" width="362" height="220" fill="#ffffff" stroke="#555555" stroke-width="1" stroke-dasharray="4 3"/>
-        <text x="404" y="23" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#111111">WIREFRAME B — LAYOUT MOBILE-FIRST DO ALUNO</text>
+        <!-- Bloco B: Wireframes Mobile e Card -->
+        <rect x="388" y="6" width="366" height="238" fill="#fafafa" stroke="#666666" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="400" y="25" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#111111">ESBOÇO B — ESTRUTURA MOBILE &amp; CARD COMPARATIVO</text>
 
-        <rect x="478" y="34" width="190" height="182" rx="10" fill="#ffffff" stroke="#111111" stroke-width="1.3"/>
-        <rect x="488" y="42" width="170" height="18" fill="#efefef" stroke="#999999" stroke-width="0.7"/>
-        <text x="573" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.3" font-weight="bold" fill="#111111">Topo | A+ | Contraste | Tema | Ajuda (?)</text>
+        <!-- Celular -->
+        <rect x="404" y="38" width="156" height="192" rx="10" fill="#ffffff" stroke="#111111" stroke-width="1.2"/>
+        <rect x="412" y="46" width="140" height="16" fill="#eeeeee" stroke="#999999" stroke-width="0.6"/>
+        <text x="482" y="57" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.8" font-weight="bold" fill="#111111">Logo | A+ | Contraste | Tema | ?</text>
+        <rect x="412" y="66" width="140" height="22" fill="#f7f7f7" stroke="#666666" stroke-width="0.7"/>
+        <text x="482" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#111111">Saudação + Resumo de Conquistas</text>
+        <rect x="412" y="92" width="140" height="15" fill="#ffffff" stroke="#888888" stroke-width="0.6"/>
+        <text x="482" y="102" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.6" fill="#222222">Evolução  |  Meu Card  |  Medidas</text>
+        <rect x="412" y="112" width="140" height="88" fill="#fafafa" stroke="#444444" stroke-width="0.8"/>
+        <text x="482" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#111111">Silhueta [ Frente | Costas ]</text>
+        <ellipse cx="482" cy="142" rx="8" ry="8" fill="#dddddd" stroke="#333333" stroke-width="0.8"/>
+        <rect x="471" y="151" width="22" height="26" rx="4" fill="#cccccc" stroke="#333333" stroke-width="0.8"/>
+        <line x1="475" y1="177" x2="473" y2="195" stroke="#333333" stroke-width="2"/>
+        <line x1="489" y1="177" x2="491" y2="195" stroke="#333333" stroke-width="2"/>
+        <rect x="412" y="205" width="140" height="16" fill="#222222"/>
+        <text x="482" y="216" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.8" font-weight="bold" fill="#ffffff">▶ Animar Linha do Tempo</text>
 
-        <rect x="488" y="64" width="170" height="22" fill="#f7f7f7" stroke="#555555" stroke-width="0.8"/>
-        <text x="573" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.5" font-weight="bold" fill="#111111">Resumo de Progresso + Botão Card PNG</text>
+        <!-- Esboço Card -->
+        <rect x="578" y="38" width="160" height="192" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.2"/>
+        <text x="658" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.4" font-weight="bold" fill="#111111">WIREFRAME DO CARD 4:5</text>
+        <rect x="588" y="61" width="140" height="26" fill="#f2f2f2" stroke="#888888" stroke-width="0.6"/>
+        <text x="658" y="77" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.8" fill="#222222">Barras: Peso | IMC | Gordura | Músc.</text>
+        <!-- Colunas laterais sem cruzar setas -->
+        <rect x="588" y="95" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="588" y="120" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="588" y="145" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="588" y="170" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
 
-        <rect x="488" y="90" width="170" height="16" fill="#ffffff" stroke="#888888" stroke-width="0.7"/>
-        <text x="573" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.1" fill="#222222">[ Evolução ]   [ Meu Card ]   [ Medidas ]</text>
+        <ellipse cx="658" cy="112" rx="7" ry="7" fill="#dddddd" stroke="#333333" stroke-width="0.8"/>
+        <rect x="648" y="121" width="20" height="36" rx="4" fill="#cccccc" stroke="#333333" stroke-width="0.8"/>
+        <line x1="653" y1="157" x2="651" y2="188" stroke="#333333" stroke-width="2"/>
+        <line x1="663" y1="157" x2="665" y2="188" stroke="#333333" stroke-width="2"/>
 
-        <rect x="488" y="110" width="82" height="20" fill="#ffffff" stroke="#999999" stroke-width="0.7"/>
-        <rect x="576" y="110" width="82" height="20" fill="#ffffff" stroke="#999999" stroke-width="0.7"/>
-        <text x="529" y="123" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.1" fill="#333333">Peso / IMC</text>
-        <text x="617" y="123" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.1" fill="#333333">Gordura / Músc.</text>
+        <rect x="690" y="95" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="690" y="120" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="690" y="145" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
+        <rect x="690" y="170" width="38" height="18" fill="#fafafa" stroke="#777777" stroke-width="0.6"/>
 
-        <rect x="488" y="135" width="170" height="72" fill="#fafafa" stroke="#444444" stroke-width="0.9"/>
-        <text x="573" y="149" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.5" font-weight="bold" fill="#111111">Mapa Anatômico [ Frente | Costas ]</text>
-        <text x="573" y="163" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.1" fill="#444444">Toque no músculo → Inicial → Atual (cm)</text>
-        <rect x="498" y="173" width="150" height="16" fill="#222222"/>
-        <text x="573" y="184" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.1" font-weight="bold" fill="#ffffff">Animar Evolução + Linha do Tempo</text>
-        <text x="573" y="201" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.7" fill="#555555">Rodapé discreto: Privacidade &amp; Cookies (LGPD)</text>
+        <line x1="626" y1="104" x2="648" y2="124" stroke="#444444" stroke-width="0.7"/>
+        <line x1="626" y1="154" x2="648" y2="146" stroke="#444444" stroke-width="0.7"/>
+        <line x1="690" y1="104" x2="668" y2="124" stroke="#444444" stroke-width="0.7"/>
+        <line x1="690" y1="154" x2="668" y2="150" stroke="#444444" stroke-width="0.7"/>
+        <text x="658" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.7" fill="#333333">10 Zonas Anatômicas Ordenadas</text>
+        <text x="658" y="222" text-anchor="middle" font-family="Arial, sans-serif" font-size="6.5" fill="#555555">(Zero cruzamento visual de linhas)</text>
       </svg>
-      <div class="figure-caption">Figura 1 — Prototipação de baixa fidelidade: fluxo do treinador com prevenção de erros (esquerda) e arquitetura mobile-first do Portal do Aluno (direita).</div>
+      <div class="figure-caption">Figura 1 — Prototipação de baixa fidelidade: fluxo de tarefas com trava preventiva de erros (Esboço A) e organização espacial do Portal Mobile e do Card 4:5 (Esboço B).</div>
     </div>
 
-    <h2>3.3 Prototipação de Alta Fidelidade e Versão Oficial em Produção</h2>
+    <h2>3.3 Protótipo Vertical de Alta Fidelidade — Detalhamento Tela a Tela</h2>
     <p>
-      Com os fluxos validados, desenvolveu-se a aplicação completa em <strong>React 18, TypeScript, Tailwind CSS e Supabase (PostgreSQL 17, Google OAuth e RLS)</strong>, publicada em produção na Vercel em <a href="https://metas-fit.vercel.app"><code>https://metas-fit.vercel.app</code></a>. O modelo corporal interativo utiliza <code>@mjcdev/react-body-highlighter</code> (perfis masculino e feminino, vistas frente e costas) e a exportação de cards PNG em alta resolução é processada via <code>html-to-image</code>. Todo código de demonstração estática foi substituído por persistência real em nuvem com onboarding automático de dois perfis de exemplo por conta.
+      Superada a validação estrutural, construiu-se um <strong>protótipo vertical e funcional de alta fidelidade</strong> (acessível em <a href="https://metas-fit.vercel.app">https://metas-fit.vercel.app</a>), cobrindo de ponta a ponta toda a jornada do treinador e do aluno com dados reais, cálculos antropométricos automáticos e exportação gráfica. A seguir detalham-se os quatro módulos interativos que compõem o protótipo:
+    </p>
+
+    <h3>Módulo A — Tela de Entrada, Identidade Visual e Tutorial de Primeiro Acesso</h3>
+    <p>
+      A tela inicial separa claramente os dois perfis de uso por meio de abas superiores (<em>Treinador</em> e <em>Aluno</em>), evitando confusão cognitiva. Criou-se uma marca vetorial própria (monograma “M” integrado a uma seta ascendente de meta e régua antropométrica), aplicada tanto no cabeçalho quanto no ícone da aba do navegador (<em>favicon</em>). No canto superior direito permanecem sempre visíveis os controles de acessibilidade (<strong>A+</strong>, <strong>Alto Contraste</strong>, <strong>Tema Claro/Escuro</strong> e <strong>Ajuda</strong>), e na base exibe-se o controle transparente de cookies e privacidade (LGPD).
+    </p>
+    <p>
+      Assim que um novo usuário realiza o primeiro login, o protótipo abre automaticamente um <strong>Tutorial Interativo Passo a Passo</strong> (5 etapas para o personal trainer e 4 etapas para o aluno), apresentando todas as funcionalidades e disponibilizando imediatamente dois perfis demonstrativos completos (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>).
     </p>
 
     <div class="figure">
-      <div class="figure-grid">
+      <img src="img/proto-login.png" alt="Tela de entrada do protótipo Medidas e Metas" />
+      <div class="figure-caption">Figura 2 — Tela inicial do protótipo: identidade visual própria, alternância entre Treinador e Aluno, controles de acessibilidade no topo e aviso de privacidade LGPD.</div>
+    </div>
+
+    <div class="figure">
+      <img src="img/proto-tutorial.png" alt="Modal de tutorial interativo de primeiro login do treinador" />
+      <div class="figure-caption">Figura 3 — Tutorial interativo de primeiro acesso aberto sobre o painel, orientando novos usuários passo a passo sobre alunos de exemplo, avaliações e cards.</div>
+    </div>
+
+    <h3>Módulo B — Painel do Personal Trainer e Perfil Evolutivo Individual</h3>
+    <p>
+      No console do treinador, a barra lateral esquerda organiza a navegação principal (<em>Visão Geral</em>, <em>Alunos</em>, <em>Acessos</em> e botão de destaque <em>Novo Aluno</em>) e agrupa no rodapé os botões de acessibilidade, <em>Tutorial</em>, <em>Ajuda</em> e <em>Tema</em> em grade simétrica 2×2 sem cortes laterais. A área central apresenta indicadores consolidados (total de alunos, avaliações registradas, portais ativos e variação média de gordura) seguidos dos cartões resumidos de cada aluno.
+    </p>
+    <p>
+      Ao selecionar um aluno, abre-se o <strong>Perfil Evolutivo</strong>, que reúne progresso percentual rumo à meta, cartões de variação desde a primeira avaliação, gráficos longitudinais de tendência e histórico detalhado com ações rápidas para editar, gerar card ou pré-visualizar exatamente a visão do aluno.
+    </p>
+
+    <div class="figure">
+      <img src="img/proto-dashboard.png" alt="Painel principal do Personal Trainer com indicadores e alunos de exemplo" />
+      <div class="figure-caption">Figura 4 — Painel do Personal Trainer (Visão Geral): cartões de indicadores no topo, barra lateral simétrica 2×2 e listagem dos perfis com resumo da evolução.</div>
+    </div>
+
+    <div class="figure">
+      <img src="img/proto-profile.png" alt="Tela de perfil individual da aluna Camila Ferreira com indicadores e gráficos" />
+      <div class="figure-caption">Figura 5 — Perfil individual da aluna Camila Ferreira: acompanhamento de metas, indicadores comparativos (Inicial → Atual) e atalhos para Nova Avaliação e Card PNG.</div>
+    </div>
+
+    <h3>Módulo C — Formulário Antropométrico Preventivo e Gerador de Card PNG</h3>
+    <p>
+      O formulário de avaliação física foi desenhado especificamente para operação ágil em tela sensível ao toque durante o atendimento presencial: divide-se entre <em>Composição Corporal</em> (peso, gordura, musculatura, calorias, idade corporal e gordura visceral) e <em>Perimetria</em> (10 circunferências em centímetros). Para apoiar o reconhecimento em vez da memorização, cada campo exibe o valor registrado na avaliação anterior e recalcula o IMC e sua classificação clínica instantaneamente conforme o peso é digitado. Caso seja inserido um valor fisiologicamente improvável, um modal de alerta intercepta o salvamento para prevenir erros de digitação.
+    </p>
+    <p>
+      Concluído o registro, o <strong>Visualizador e Exportador de Card</strong> monta automaticamente a arte comparativa (<em>Inicial / Anterior / Atual</em>), ordenando as 10 caixas anatômicas verticalmente ao redor do corpo humano para impedir qualquer cruzamento de setas, permitindo alternar entre proporção <strong>4:5</strong> (Feed/WhatsApp) e <strong>9:16</strong> (Stories/Status), além dos temas <em>Dark Pro</em> e <em>Clássico</em>.
+    </p>
+
+    <div class="figure">
+      <img src="img/proto-form.png" alt="Formulário de avaliação física com cálculo automático de IMC e referência anterior" />
+      <div class="figure-caption">Figura 6 — Formulário de avaliação antropométrica: cálculo em tempo real do IMC, referência aos valores anteriores e validação preventiva contra erros clínicos.</div>
+    </div>
+
+    <div class="figure">
+      <img src="img/proto-card.png" alt="Visualizador e gerador de Card Oficial PNG 4:5" />
+      <div class="figure-caption">Figura 7 — Gerador do Card Oficial PNG: seletor de formato (4:5 ou 9:16) e tema, com apontamento anatômico limpo das 10 circunferências e exportação direta.</div>
+    </div>
+
+    <h3>Módulo D — Portal Mobile do Aluno e Mapa Anatômico Interativo</h3>
+    <p>
+      Pensado prioritariamente para smartphones, o <strong>Portal do Aluno</strong> apresenta uma saudação humanizada com selos das conquistas alcançadas (ex.: centímetros reduzidos de cintura e ganho percentual de massa muscular), seguida de navegação simplificada em três abas (<em>Evolução</em>, <em>Meu Card</em> e <em>Medidas</em>). Na aba principal, o aluno interage diretamente com a silhueta anatômica masculina ou feminina, alterna entre <strong>Frente</strong> e <strong>Costas</strong>, toca sobre qualquer grupo muscular para ler a evolução localizada e utiliza o botão <strong>Animar Evolução</strong> para assistir à progressão desde a primeira avaliação até a projeção de sua meta.
+    </p>
+
+    <div class="figure">
+      <div class="figure-pair">
         <div>
-          <img src="img/medidas-divina.png" alt="Portal mobile feminino com mapa anatômico interativo" />
-          <div class="figure-caption">Figura 2a — Portal do Aluno (perfil feminino, viewport mobile): métricas de evolução, seletor Frente/Costas, mapa anatômico interativo e linha do tempo.</div>
+          <img src="img/proto-portal-camila.png" alt="Portal mobile feminino da aluna Camila Ferreira" />
+          <div class="figure-caption">Figura 8a — Portal Mobile (perfil feminino — Camila Ferreira): resumo motivacional, métricas e mapa anatômico interativo.</div>
         </div>
         <div>
-          <img src="img/medidas-lucas.png" alt="Portal mobile masculino com mapa anatômico interativo" />
-          <div class="figure-caption">Figura 2b — Portal do Aluno (perfil masculino, viewport mobile): destaque simultâneo de redução abdominal/quadril e ganho de volume muscular.</div>
+          <img src="img/proto-portal-rafael.png" alt="Portal mobile masculino do aluno Rafael Nogueira" />
+          <div class="figure-caption">Figura 8b — Portal Mobile (perfil masculino — Rafael Nogueira): destaque de hipertrofia muscular (laranja) e redução abdominal (verde).</div>
         </div>
       </div>
     </div>
 
-    <div class="figure">
-      <img src="img/login-desktop.png" alt="Tela de entrada oficial do Medidas e Metas com Google OAuth direto e aviso LGPD de cookies" style="max-height:84mm;" />
-      <div class="figure-caption">Figura 2c — Tela oficial de autenticação em produção (1280×820): login direto via Google OAuth (sem barreira de chave), aba do Portal do Aluno, barra de acessibilidade (A+, Contraste, Tema Claro/Escuro, Ajuda) e banner de consentimento de cookies (LGPD).</div>
-    </div>
+    <h2>3.4 Evolução Iterativa do Protótipo (Síntese Antes × Depois)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%;">Elemento da Interface</th>
+          <th style="width:38%;">Primeira Versão do Protótipo (v1)</th>
+          <th style="width:40%;">Versão Refinada em Produção (v2)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Representação Corporal</strong></td>
+          <td>Silhueta vetorial simplificada desenhada manualmente, que causou estranhamento estético nos testes.</td>
+          <td>Mapa anatômico muscular detalhado (masculino/feminino, Frente e Costas) com inspeção interativa por toque.</td>
+        </tr>
+        <tr>
+          <td><strong>Fluxo de Primeiro Acesso</strong></td>
+          <td>Exigia chave secreta adicional após login Google e abria painel vazio sem exemplos ou instruções.</td>
+          <td>Entrada direta via Google, criação automática de 2 alunos-exemplo e Tutorial Guiado para treinador e aluno.</td>
+        </tr>
+        <tr>
+          <td><strong>Segurança na Digitação</strong></td>
+          <td>Aceitava qualquer número positivo sem alertar variações bruscas decorrentes de erro de vírgula.</td>
+          <td>Referência do valor anterior em cada campo + modal preventivo de confirmação para valores atípicos.</td>
+        </tr>
+        <tr>
+          <td><strong>Layout, Marca e Privacidade</strong></td>
+          <td>Ícone genérico na aba, recorte lateral nos botões da sidebar e ausência de aviso explícito de cookies.</td>
+          <td>Logo própria + favicon, sidebar reorganizada em grade 2×2 sem corte, banner LGPD e minimização de dados.</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
-  <!-- ==================== SEÇÃO 4 ==================== -->
-  <section class="phase-break">
+  <!-- ==================== SEÇÃO 4: AVALIAÇÃO DE USABILIDADE ==================== -->
+  <section class="chapter">
     <h1 class="section-title">4. Fase: Avaliação de Usabilidade</h1>
 
-    <h2>4.1 Método 1 — Avaliação Heurística (10 Heurísticas de Nielsen)</h2>
+    <h2>4.1 Método 1 — Avaliação Heurística (10 Heurísticas de Jakob Nielsen)</h2>
     <p>
-      A versão publicada foi submetida a uma inspeção sistemática fundamentada nas <strong>10 Heurísticas de Usabilidade de Jakob Nielsen</strong>, conduzida pela dupla (Iago Expedito e Kelwin Afonso) com validação prática junto ao personal trainer <strong>Italo Cristino</strong>:
+      O protótipo de alta fidelidade foi inspecionado sistematicamente à luz das <strong>10 Heurísticas de Usabilidade de Nielsen</strong>, cruzando a análise técnica da dupla com a avaliação de domínio do personal trainer Italo Cristino:
     </p>
 
     <table>
       <thead>
         <tr>
-          <th style="width:22%;">Heurística de Nielsen</th>
-          <th style="width:38%;">Verificação na Interface Oficial</th>
-          <th style="width:40%;">Situação &amp; Ação Aplicada</th>
+          <th style="width:24%;">Heurística de Nielsen</th>
+          <th style="width:40%;">Como é Atendida no Protótipo</th>
+          <th style="width:36%;">Resultado da Inspeção</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>1. Visibilidade do status do sistema</strong></td>
-          <td>Etapa ativa destacada na linha do tempo (<code>INICIAL / AV. 2 / ATUAL / META</code>), feedback de carregamento, exportação PNG e estado de consentimento LGPD.</td>
-          <td><span class="status-label">Conforme</span> — O painel da zona selecionada acompanha dinamicamente o indicador tocado.</td>
+          <td><strong>1. Visibilidade do status</strong></td>
+          <td>Indicador claro da etapa ativa na linha do tempo (Inicial / Av. 2 / Atual / Meta), barras de progresso e estados de carregamento/exportação.</td>
+          <td><span class="status-label">Conforme</span> — Feedback visual imediato em cada toque muscular.</td>
         </tr>
         <tr>
           <td><strong>2. Correspondência com o mundo real</strong></td>
-          <td>Terminologia fiel à rotina do personal Italo Cristino: <em>Bíceps D/E, Ombro, Peito, Cintura, Quadril, Coxa D/E, Panturrilha D/E</em> em <code>cm</code> e <code>kg</code>.</td>
-          <td><span class="status-label">Conforme</span> — Espelhamento anatômico correto de Direito/Esquerdo ao alternar Frente e Costas.</td>
+          <td>Vocabulário idêntico à ficha física real utilizada na academia (perimetria bilateral D/E em cm, bioimpedância e IMC).</td>
+          <td><span class="status-label">Conforme</span> — Espelhamento anatômico fiel entre Frente e Costas.</td>
         </tr>
         <tr>
-          <td><strong>3. Controle e liberdade do usuário</strong></td>
-          <td>Alternância livre de etapas/temas, retorno rápido ao estado inicial, tecla <code>Esc</code> nos modais e escolha granular no banner de cookies.</td>
-          <td><span class="status-label">Conforme</span> — Exploração sem risco de alterar dados salvos; perfis de exemplo podem ser excluídos a qualquer momento.</td>
+          <td><strong>3. Controle e liberdade</strong></td>
+          <td>Botões claros de voltar, fechamento de modais com tecla <em>Esc</em>, opção de pular/rever o tutorial e exclusão livre dos perfis de exemplo.</td>
+          <td><span class="status-label">Conforme</span> — Navegação reversível sem aprisionamento.</td>
         </tr>
         <tr>
           <td><strong>4. Consistência e padrões</strong></td>
-          <td>Tokens CSS unificados (<code>--c-black</code>, <code>--c-surface</code>, <code>--c-line</code>) aplicados em todas as telas nos modos Claro e Escuro.</td>
-          <td><span class="status-label">Corrigido</span> — Eliminadas linhas brancas estouradas no tema escuro e uniformizado o contraste dos cartões e gráficos.</td>
+          <td>Padronização visual entre temas Claro e Escuro, cores semânticas fixas (verde e laranja) e posicionamento uniforme dos ícones globais.</td>
+          <td><span class="status-label">Corrigido</span> — Ajustado contraste de bordas e alinhamento da barra lateral.</td>
         </tr>
         <tr>
           <td><strong>5. Prevenção de erros</strong></td>
-          <td>No <code>AssessmentForm</code>, validação de obrigatoriedade + modal de confirmação ao detectar variação de peso &gt; 12 kg ou medidas fora da faixa fisiológica.</td>
-          <td><span class="status-label">Implementado</span> — Evita erros comuns de vírgula (ex.: digitar <code>760</code> em vez de <code>76,0</code>) antes da gravação no Supabase.</td>
+          <td>Modal preventivo antes de gravar variações extremas de peso ou percentuais fisiologicamente improváveis no formulário.</td>
+          <td><span class="status-label">Implementado</span> — Bloqueia erros comuns de vírgula no celular.</td>
         </tr>
         <tr>
           <td><strong>6. Reconhecimento em vez de memorização</strong></td>
-          <td>Cada campo exibe o valor <em>Anterior</em>; novos usuários já visualizam 2 alunos-exemplo preenchidos; mapa exibe legenda permanente.</td>
-          <td><span class="status-label">Implementado</span> — Reduz carga cognitiva na digitação e elimina a síndrome da “tela vazia” no primeiro login.</td>
+          <td>Exibição do valor da avaliação anterior em cada campo, legendas visíveis no mapa corporal e perfis de exemplo já preenchidos.</td>
+          <td><span class="status-label">Implementado</span> — Dispensa consulta a fichas externas.</td>
         </tr>
         <tr>
-          <td><strong>7. Flexibilidade e eficiência de uso</strong></td>
-          <td>Login Google em 1 clique, acesso direto do aluno por link (<code>?aluno=CODIGO</code>), teclado decimal mobile e exportação PNG 3x para WhatsApp.</td>
-          <td><span class="status-label">Refinado</span> — Removida a chave extra após o Google OAuth, acelerando o onboarding sem abrir mão do isolamento RLS.</td>
+          <td><strong>7. Flexibilidade e eficiência</strong></td>
+          <td>Login Google em 1 clique, link direto para o aluno sem cadastro de senha e exportação pronta do Card PNG para WhatsApp.</td>
+          <td><span class="status-label">Refinado</span> — Fluxo enxuto tanto para novatos quanto experientes.</td>
         </tr>
         <tr>
           <td><strong>8. Estética e design minimalista</strong></td>
-          <td>Substituição do boneco SVG inicial por modelo anatômico profissional e remoção de elementos redundantes na tela de login.</td>
-          <td><span class="status-label">Refinado</span> — Hierarquia visual limpa, focada nas métricas de evolução corporal.</td>
+          <td>Substituição do desenho vetorial rústico inicial por silhueta anatômica limpa e remoção de campos desnecessários no cadastro.</td>
+          <td><span class="status-label">Refinado</span> — Foco total nos indicadores relevantes.</td>
         </tr>
         <tr>
-          <td><strong>9. Auxílio no reconhecimento e recuperação de erros</strong></td>
-          <td>Mensagens objetivas em português para código de aluno inválido, acesso pausado pelo personal ou campo obrigatório ausente.</td>
-          <td><span class="status-label">Conforme</span> — Indica causa e ação corretiva em linguagem direta.</td>
+          <td><strong>9. Reconhecimento e recuperação de erros</strong></td>
+          <td>Avisos em linguagem simples e cordial quando um código de aluno está incorreto, pausado ou quando falta preencher um campo obrigatório.</td>
+          <td><span class="status-label">Conforme</span> — Explica a causa e como resolver na hora.</td>
         </tr>
         <tr>
           <td><strong>10. Ajuda e documentação</strong></td>
-          <td><strong>Tutorial Interativo de Primeiro Login</strong> (treinador e aluno) + botão permanente <strong>Tutorial</strong> e <strong>Ajuda (?)</strong> abrindo o <code>HelpModal</code> contextualizado e acesso rápido à Política LGPD.</td>
-          <td><span class="status-label">Implementado</span> — Ensina todas as funções logo no primeiro acesso e permanece acessível sem sair da tela atual.</td>
+          <td>Tutorial interativo no primeiro acesso (treinador e aluno) somado ao botão permanente de <strong>Ajuda (?)</strong> contextualizado por tela.</td>
+          <td><span class="status-label">Implementado</span> — Suporte integrado sem sair da tarefa.</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>4.2 Método 2 — Testes de Usabilidade com Usuários</h2>
+    <h2>4.2 Método 2 — Testes de Usabilidade com Usuários (Thinking Aloud)</h2>
     <ul>
-      <li><strong>Tarefas Avaliadas:</strong> <em>T1:</em> Acessar o portal pelo celular e identificar a variação de cintura; <em>T2:</em> Alternar Frente/Costas, inspecionar dois grupos musculares e animar a linha do tempo; <em>T3:</em> Alternar Tema Claro/Escuro, ajustar preferências de cookies e baixar o Card PNG; <em>T4 (Personal Trainer Italo Cristino):</em> Entrar com Google, testar os perfis de exemplo, registrar uma avaliação completa e acionar o alerta preventivo de medida atípica.</li>
-      <li><strong>Participantes e Ética:</strong> 6 participantes representativos (alunos acompanhados + validação prática com o personal trainer <strong>Italo Cristino</strong>), sob consentimento livre e esclarecido (TCLE) e anonimização individual (P1–P6).</li>
-      <li><strong>Técnica Aplicada:</strong> Observação direta em smartphone e desktop aliada à técnica de <strong>Pensamento em Voz Alta (<em>Thinking Aloud</em>)</strong>, registrando hesitações, comentários espontâneos e taxa de conclusão.</li>
+      <li><strong>Planejamento de Tarefas:</strong> <em>Tarefa 1:</em> Acessar o portal mobile pelo link individual e identificar a evolução da cintura; <em>Tarefa 2:</em> Alternar Frente/Costas, tocar em dois grupos musculares e animar a linha do tempo; <em>Tarefa 3:</em> Alternar Tema Claro/Escuro, testar o botão <em>A+</em> e baixar o Card PNG; <em>Tarefa 4 (Personal Trainer Italo Cristino):</em> Percorrer o tutorial inicial, cadastrar nova avaliação e validar o alerta preventivo de valor extremo.</li>
+      <li><strong>Participantes e Método:</strong> 6 usuários representativos (alunos acompanhados + validação profissional com o personal trainer Italo Cristino), sob TCLE e anonimato, utilizando observação da tela combinada à técnica do <strong>Pensamento em Voz Alta (<em>Thinking Aloud</em>)</strong>.</li>
     </ul>
 
-    <h3>Classificação dos Achados: Barreiras vs. Ruídos &amp; Refinamento Iterativo</h3>
+    <h2>4.3 Classificação dos Achados: Barreiras vs. Ruídos</h2>
     <table>
       <thead>
         <tr>
-          <th style="width:14%;">Tipo</th>
-          <th style="width:43%;">Achado Coletado nos Testes</th>
-          <th style="width:43%;">Refinamento Aplicado em Produção</th>
+          <th style="width:15%;">Classificação</th>
+          <th style="width:42%;">Problema Observado nos Testes</th>
+          <th style="width:43%;">Solução Implementada no Refinamento</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><span class="status-label">Barreira</span></td>
-          <td>Exigir uma chave secreta adicional logo após o login Google travava o primeiro acesso de novos treinadores e avaliadores, além de exibir um painel vazio sem referência visual.</td>
-          <td>Removido o bloqueio de chave pós-Google, mantido isolamento multi-tenant via RLS (<code>user_id</code>) e criada a RPC <code>seed_onboarding_examples()</code> que insere 2 alunos-exemplo (<em>Camila Ferreira</em> e <em>Rafael Nogueira</em>) no primeiro acesso.</td>
+          <td>Exigência inicial de chave secreta extra após o login Google impedia novos avaliadores de testar o sistema e exibia tela vazia sem orientação.</td>
+          <td>Liberada entrada direta via Google com isolamento por conta, 2 alunos-exemplo automáticos e Tutorial Interativo de Primeiro Acesso.</td>
         </tr>
         <tr>
           <td><span class="status-label">Barreira</span></td>
-          <td>Em telas móveis estreitas, grades CSS sem <code>min-w-0</code> causavam corte horizontal à direita, ocultando parte do botão <em>Costas</em> e da métrica <em>Cintura</em>.</td>
-          <td>Aplicados <code>min-w-0</code> e <code>overflow-x-hidden</code> em <code>ClientPortal.tsx</code> e <code>StudentProfile.tsx</code>, eliminando 100% do overflow lateral.</td>
+          <td>Em celulares estreitos, contêineres em grade cortavam a borda direita do botão <em>Costas</em> e parte do cartão de medidas.</td>
+          <td>Corrigido o dimensionamento flexível das grades mobile, eliminando 100% da rolagem horizontal indesejada.</td>
         </tr>
         <tr>
           <td><span class="status-label">Barreira</span></td>
-          <td>A primeira silhueta vetorial desenhada manualmente gerou rejeição estética nos usuários e no personal Italo Cristino, reduzindo a credibilidade percebida da aplicação.</td>
-          <td>Substituída pelo mapa anatômico profissional (<code>@mjcdev/react-body-highlighter</code>) com perfis masculino/feminino, vista frente/costas e inspeção por toque.</td>
+          <td>Rejeição visual ao boneco artesanal da primeira versão, reduzindo a percepção de credibilidade clínica da plataforma.</td>
+          <td>Adoção do modelo anatômico muscular detalhado (Frente/Costas, masculino e feminino) com resposta ao toque.</td>
         </tr>
         <tr>
           <td><span class="status-label">Ruído</span></td>
-          <td>Bordas muito claras no tema escuro causavam desconforto visual em telas brilhantes e faltava transparência formal sobre cookies e privacidade de dados corporais.</td>
-          <td>Refatorados os tokens CSS em <code>src/index.css</code> e implementado o componente <code>CookieConsent.tsx</code> com banner LGPD e modal de Privacidade, Cookies e Termos de Uso.</td>
-        </tr>
-        <tr>
-          <td><span class="status-label">Ruído</span></td>
-          <td>Na barra lateral desktop, a linha com <em>A+</em>, <em>Contraste</em> e <em>Ajuda</em> sofria recorte à direita; além disso, o site usava ícone genérico na aba do navegador.</td>
-          <td>Reorganizado o painel lateral em grade 2×2 simétrica (<code>fullWidth</code> em <code>AccessibilityControls</code>) sem recorte mesmo com <code>A+</code> ativo, e criada identidade visual vetorial própria (<code>BrandLogo.tsx</code> e <code>favicon.svg</code>).</td>
-        </tr>
-        <tr>
-          <td><span class="status-label">Ruído</span></td>
-          <td>Usuários de baixa visão encontravam bloqueio ao zoom por pinça no celular devido à configuração inicial da tag <code>viewport</code>.</td>
-          <td>Removido <code>user-scalable=no</code> em <code>index.html</code> e adicionados controles globais persistentes de <strong>Texto Ampliado (A+)</strong>, <strong>Alto Contraste</strong>, <strong>Tutorial</strong> e <strong>Ajuda (?)</strong>.</td>
+          <td>Botão <em>Ajuda</em> sofria corte lateral na barra esquerda desktop e usuários de baixa visão não conseguiam ampliar a fonte facilmente.</td>
+          <td>Reorganizados os controles laterais em grade 2×2 simétrica, liberado zoom no celular e incluídos botões globais <strong>A+</strong> e <strong>Contraste</strong>.</td>
         </tr>
       </tbody>
     </table>
   </section>
 
-  <!-- ==================== SEÇÃO 5 ==================== -->
-  <section class="phase-break">
-    <h1 class="section-title">5. Arquitetura de Produção, Segurança e Publicação</h1>
+  <!-- ==================== SEÇÃO 5: CONCLUSÃO E REFERÊNCIAS ==================== -->
+  <section class="chapter">
+    <h1 class="section-title">5. Conclusão e Referências Bibliográficas</h1>
 
+    <h2>5.1 Conclusão</h2>
     <p>
-      Para além do protótipo acadêmico, o <strong>Medidas &amp; Metas</strong> foi implantado em ambiente real de produção com separação de camadas entre interface, autenticação, banco relacional e entrega contínua:
+      O desenvolvimento iterativo do projeto <strong>Medidas &amp; Metas</strong>, conduzido por <strong>Iago Expedito</strong> e <strong>Kelwin Afonso</strong> a partir da rotina real do personal trainer <strong>Italo Cristino</strong>, evidenciou na prática o papel decisivo da Engenharia de Usabilidade e do Design Centrado no Usuário. Ao longo das fases de levantamento por triangulação, concepção de cenários, prototipação evolutiva (dos esboços de baixa fidelidade ao protótipo vertical completo em produção) e avaliação combinada (inspeção heurística de Nielsen e sessões de <em>Thinking Aloud</em>), cada barreira e ruído identificado foi convertido em melhoria tangível de interface.
+    </p>
+    <p>
+      Como resultado final, entregou-se uma plataforma funcional publicada online (<a href="https://metas-fit.vercel.app">https://metas-fit.vercel.app</a>) que reduz drasticamente o tempo de registro antropométrico, previne erros clínicos de digitação, promove inclusão por meio de recursos permanentes, temporários e situacionais de acessibilidade, respeita a minimização de dados pessoais (LGPD) e transforma métricas físicas em uma experiência visual clara e motivadora para alunos e profissionais.
     </p>
 
-    <table>
-      <thead>
-        <tr>
-          <th style="width:24%;">Camada</th>
-          <th style="width:30%;">Tecnologia / Serviço</th>
-          <th style="width:46%;">Papel e Garantias Verificadas em Produção</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Frontend Web</strong></td>
-          <td>React 18 + TypeScript + Vite + Tailwind CSS</td>
-          <td>SPA responsiva mobile-first publicada em <a href="https://metas-fit.vercel.app"><code>https://metas-fit.vercel.app</code></a> com reescrita de rotas via <code>vercel.json</code> e exportação PNG local via <code>html-to-image</code>.</td>
-        </tr>
-        <tr>
-          <td><strong>Autenticação</strong></td>
-          <td>Supabase Auth + Google OAuth 2.0</td>
-          <td>Entrada direta do treinador com conta Google verificada, sem armazenamento de senhas pela aplicação, com sessão gerenciada por JWT.</td>
-        </tr>
-        <tr>
-          <td><strong>Banco e Segurança</strong></td>
-          <td>Supabase PostgreSQL 17 + RLS + Triggers SQL</td>
-          <td>Tabelas <code>alunos</code>, <code>avaliacoes</code> e <code>perfis_treinador</code> protegidas por <em>Row Level Security</em> por <code>(select auth.uid()) = user_id</code>; cálculo automático de IMC via trigger; auditoria aprovada no Security &amp; Performance Advisor.</td>
-        </tr>
-        <tr>
-          <td><strong>Portal do Aluno</strong></td>
-          <td>RPC <code>get_client_portal(text)</code></td>
-          <td>Acesso anônimo restrito exclusivamente à leitura do aluno dono do código/token ativo, sem permissão de <code>SELECT</code> direto nas tabelas para o papel <code>anon</code>.</td>
-        </tr>
-        <tr>
-          <td><strong>Versionamento &amp; CI/CD</strong></td>
-          <td>Git + GitHub + Vercel</td>
-          <td>Repositório <a href="https://github.com/expeditodeviago/metas-fit-"><code>expeditodeviago/metas-fit-</code></a> integrado à Vercel: todo envio via <code>git push origin main</code> dispara build automatizado (<code>tsc --noEmit &amp;&amp; vite build</code>) e atualização imediata em produção.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2>5.1 Fluxo Operacional de Atualização (Git Push e Deploy Contínuo)</h2>
-    <p>
-      As credenciais sensíveis permanecem isoladas fora do controle de versão (<code>.env</code> listado no <code>.gitignore</code> e replicado como variáveis de ambiente na Vercel). Para documentar a manutenção contínua do projeto, elaborou-se ainda o guia prático <code>docs/TUTORIAL_GIT_PUSH.md</code> detalhando os comandos essenciais de publicação (<code>git status</code>, <code>git add .</code>, <code>git commit -m "..."</code> e <code>git push origin main</code>) e a validação de build antes do envio.
-    </p>
-
-    <h1 class="section-title" style="margin-top:4.5mm;">6. Conclusão e Referências</h1>
-    <p>
-      O desenvolvimento do <strong>Medidas &amp; Metas</strong> — estruturado sobre a demanda real do personal trainer <strong>Italo Cristino</strong> e conduzido por <strong>Iago Expedito</strong> e <strong>Kelwin Afonso</strong> nas quatro fases da disciplina de Interface Homem-Máquina — demonstrou na prática como decisões iterativas centradas no usuário transformam a qualidade de um produto digital. Cada barreira e ruído identificado nas avaliações heurísticas e nos testes de campo foi convertido em entregas concretas em produção: mapa anatômico interativo, formulário com prevenção de erros clínicos, acessibilidade permanente/temporária/situacional, conformidade transparente com a LGPD e onboarding imediato via Google OAuth com dois alunos de exemplo prontos para exploração.
-    </p>
-
-    <h2>Referências</h2>
+    <h2>5.2 Referências Bibliográficas</h2>
     <div class="refs">
+      <p>ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS (ABNT). <strong>NBR 14724: Informação e documentação — Trabalhos acadêmicos — Apresentação</strong>. Rio de Janeiro: ABNT, 2011.</p>
       <p>BRASIL. <strong>Lei nº 13.709, de 14 de agosto de 2018</strong>. Lei Geral de Proteção de Dados Pessoais (LGPD). Brasília, DF: Presidência da República, 2018.</p>
-      <p>NIELSEN, J. <strong>10 Usability Heuristics for User Interface Design</strong>. Nielsen Norman Group, 1994 (atualizado em 2024).</p>
-      <p>PREECE, J.; ROGERS, Y.; SHARP, H. <strong>Design de Interação: Além da Interação Humano-Computador</strong>. 3. ed. Porto Alegre: Bookman, 2013.</p>
-      <p>W3C — World Wide Web Consortium. <strong>Web Content Accessibility Guidelines (WCAG) 2.1</strong>. W3C Recommendation, 2018.</p>
+      <p>NIELSEN, Jakob. <strong>10 Usability Heuristics for User Interface Design</strong>. Fremont: Nielsen Norman Group, 1994 (atualizado em 2024).</p>
+      <p>PREECE, Jennifer; ROGERS, Yvonne; SHARP, Helen. <strong>Design de Interação: Além da Interação Humano-Computador</strong>. 3. ed. Porto Alegre: Bookman, 2013.</p>
+      <p>WORLD WIDE WEB CONSORTIUM (W3C). <strong>Web Content Accessibility Guidelines (WCAG) 2.1</strong>. W3C Recommendation, 2018.</p>
     </div>
   </section>
 
